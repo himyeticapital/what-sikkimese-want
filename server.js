@@ -200,6 +200,33 @@ app.post('/api/admin/login', (req, res) => {
     }
 });
 
+// Get recent public requests (for live feed)
+app.get('/api/requests/public/recent', (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Get recent requests, sorted by newest first
+        const recentRequests = [...db.requests]
+            .sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at))
+            .slice(0, limit)
+            .map(r => ({
+                id: r.id,
+                name: r.name.split(' ')[0] + ' ' + r.name.split(' ').slice(1).map(n => n[0] + '.').join(''), // Privacy: "John D."
+                district: r.district,
+                location: r.location,
+                amenities: r.amenities,
+                priority: r.priority,
+                status: r.status,
+                submitted_at: r.submitted_at
+            }));
+
+        res.json({ success: true, requests: recentRequests });
+    } catch (error) {
+        console.error('Error fetching public requests:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch requests' });
+    }
+});
+
 // Get statistics (Admin Dashboard)
 app.get('/api/stats', (req, res) => {
     try {

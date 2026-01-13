@@ -437,6 +437,223 @@ body {
     line-height: 1.5;
 }
 
+/* Live Feed Section */
+.live-feed-section {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    padding: 60px 0;
+    color: white;
+}
+
+.live-feed-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.live-feed-section .section-title {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.live-indicator {
+    width: 12px;
+    height: 12px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 8px #00ff88;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.live-feed-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 16px;
+}
+
+.live-feed-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.live-feed {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.live-feed::-webkit-scrollbar {
+    width: 6px;
+}
+
+.live-feed::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.live-feed::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.feed-item {
+    background: var(--bg-white);
+    border-radius: 8px;
+    padding: 16px;
+    color: var(--text-body);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feed-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.feed-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.feed-name {
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 15px;
+}
+
+.feed-time {
+    font-size: 12px;
+    color: var(--text-light);
+    background: var(--bg-light);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.feed-item-body {
+    margin-bottom: 12px;
+}
+
+.feed-amenities,
+.feed-location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-body);
+    margin-bottom: 6px;
+}
+
+.feed-amenities svg,
+.feed-location svg {
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.feed-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feed-priority,
+.feed-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.priority-low { background: #e3f2fd; color: #1976d2; }
+.priority-medium { background: #fff3e0; color: #f57c00; }
+.priority-high { background: #ffebee; color: #d32f2f; }
+.priority-urgent { background: #d32f2f; color: white; }
+
+.status-pending { background: #fff8e1; color: #f9a825; }
+.status-approved { background: #e8f5e9; color: #388e3c; }
+.status-rejected { background: #ffebee; color: #d32f2f; }
+.status-in-progress { background: #e3f2fd; color: #1976d2; }
+
+.feed-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+}
+
+.loading-spinner {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.live-feed-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+}
+
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.refresh-btn.spinning svg {
+    animation: spin 0.5s linear;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 /* Main Content Area */
 .main-content {
     background: var(--bg-section);

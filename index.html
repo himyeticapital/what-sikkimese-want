@@ -145,6 +145,35 @@
         </div>
     </section>
 
+    <!-- Live Requests Feed Section -->
+    <section class="live-feed-section">
+        <div class="section-container">
+            <div class="live-feed-header">
+                <h2 class="section-title">
+                    <span class="live-indicator"></span>
+                    Live Community Requests
+                </h2>
+                <p class="live-feed-subtitle">See what your fellow Sikkimese are requesting in real-time</p>
+            </div>
+            <div class="live-feed-container">
+                <div id="liveFeed" class="live-feed">
+                    <div class="loading-spinner">Loading requests...</div>
+                </div>
+            </div>
+            <div class="live-feed-footer">
+                <span id="requestCount">0 requests</span> submitted so far
+                <button id="refreshFeed" class="refresh-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content Area -->
     <main id="main-content" class="main-content">
         <div class="content-wrapper">

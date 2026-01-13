@@ -170,6 +170,101 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // ==========================================
+    // LIVE FEED FUNCTIONALITY
+    // ==========================================
+
+    const liveFeed = document.getElementById('liveFeed');
+    const requestCount = document.getElementById('requestCount');
+    const refreshBtn = document.getElementById('refreshFeed');
+
+    // Fetch and display live requests
+    async function fetchLiveRequests() {
+        try {
+            const response = await fetch(`${API_BASE}/api/requests/public/recent?limit=10`);
+            const result = await response.json();
+
+            if (result.success && result.requests) {
+                displayLiveRequests(result.requests);
+                requestCount.textContent = `${result.requests.length}+ requests`;
+            }
+        } catch (error) {
+            console.error('Error fetching live requests:', error);
+            liveFeed.innerHTML = '<div class="feed-empty">Unable to load requests. Please try again later.</div>';
+        }
+    }
+
+    // Display requests in the feed
+    function displayLiveRequests(requests) {
+        if (requests.length === 0) {
+            liveFeed.innerHTML = '<div class="feed-empty">No requests yet. Be the first to submit one!</div>';
+            return;
+        }
+
+        liveFeed.innerHTML = requests.map(req => {
+            const timeAgo = getTimeAgo(new Date(req.submitted_at));
+            const amenitiesList = req.amenities.slice(0, 2).join(', ') + (req.amenities.length > 2 ? '...' : '');
+            const priorityClass = req.priority.toLowerCase();
+            const statusClass = req.status.toLowerCase();
+
+            return `
+                <div class="feed-item" data-id="${req.id}">
+                    <div class="feed-item-header">
+                        <span class="feed-name">${req.name}</span>
+                        <span class="feed-time">${timeAgo}</span>
+                    </div>
+                    <div class="feed-item-body">
+                        <div class="feed-amenities">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14,2 14,8 20,8"></polyline>
+                            </svg>
+                            ${amenitiesList}
+                        </div>
+                        <div class="feed-location">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            ${req.location}, ${req.district}
+                        </div>
+                    </div>
+                    <div class="feed-item-footer">
+                        <span class="feed-priority priority-${priorityClass}">${req.priority}</span>
+                        <span class="feed-status status-${statusClass}">${req.status}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Helper function for time ago
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 60) return 'Just now';
+        if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+        if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+        return date.toLocaleDateString();
+    }
+
+    // Refresh button handler
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            this.classList.add('spinning');
+            fetchLiveRequests().then(() => {
+                setTimeout(() => this.classList.remove('spinning'), 500);
+            });
+        });
+    }
+
+    // Initial load
+    fetchLiveRequests();
+
+    // Auto-refresh every 30 seconds
+    setInterval(fetchLiveRequests, 30000);
+
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
     console.log('Backend API:', API_BASE + '/api');
