@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Sikkim Amenities Portal</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1>Admin Login</h1>
+            <p>Sikkim Amenities Portal</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+                <p class="login-hint">Default: admin / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboardScreen" class="dashboard-container" style="display: none;">
+        <header class="dashboard-header">
+            <h1>Admin Dashboard</h1>
+            <button id="logoutBtn" class="btn-logout">Logout</button>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card stat-total">
+                <h3>Total Requests</h3>
+                <p class="stat-number" id="statTotal">0</p>
+            </div>
+            <div class="stat-card stat-pending">
+                <h3>Pending</h3>
+                <p class="stat-number" id="statPending">0</p>
+            </div>
+            <div class="stat-card stat-approved">
+                <h3>Approved</h3>
+                <p class="stat-number" id="statApproved">0</p>
+            </div>
+            <div class="stat-card stat-rejected">
+                <h3>Rejected</h3>
+                <p class="stat-number" id="statRejected">0</p>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <h2>Filter Requests</h2>
+            <div class="filters-group">
+                <select id="filterStatus" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="In Progress">In Progress</option>
+                </select>
+                <select id="filterDistrict" class="filter-select">
+                    <option value="">All Districts</option>
+                    <option value="Gangtok">Gangtok</option>
+                    <option value="Mangan">Mangan</option>
+                    <option value="Namchi">Namchi</option>
+                    <option value="Gyalshing">Gyalshing</option>
+                    <option value="Pakyong">Pakyong</option>
+                    <option value="Soreng">Soreng</option>
+                </select>
+                <select id="filterPriority" class="filter-select">
+                    <option value="">All Priority</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Urgent">Urgent</option>
+                </select>
+                <button id="applyFilters" class="btn-apply">Apply Filters</button>
+                <button id="clearFilters" class="btn-clear">Clear</button>
+            </div>
+        </div>
+
+        <div class="requests-section">
+            <h2>All Requests</h2>
+            <div id="requestsContainer" class="requests-table-container">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Ref ID</th>
+                            <th>Name</th>
+                            <th>District</th>
+                            <th>Amenities</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestsTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Loading requests...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            <h2>Request Details</h2>
+            <div id="detailContent"></div>
+            <div class="modal-actions">
+                <h3>Update Status</h3>
+                <select id="updateStatus" class="status-select">
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+                <textarea id="adminNotes" placeholder="Admin notes (optional)" rows="3"></textarea>
+                <div class="button-group">
+                    <button id="saveChanges" class="btn-save">Save Changes</button>
+                    <button id="deleteRequest" class="btn-delete">Delete Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

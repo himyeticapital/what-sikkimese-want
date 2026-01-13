@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Sikkimese Want!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero Section with Background -->
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>What Sikkimese Want!</h1>
+            <h2>Your voice. Your district. Your future.</h2>
+            <p class="tagline">Request amenities for your community</p>
+        </div>
+    </div>
+
+    <!-- Image Gallery -->
+    <section class="gallery-section">
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800&q=80" alt="Sikkim Monastery">
+                <div class="gallery-overlay">
+                    <p>Ancient Monasteries</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1626621341721-3ab9d74c7e6d?w=800&q=80" alt="Sikkim Mountains">
+                <div class="gallery-overlay">
+                    <p>Majestic Himalayas</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=800&q=80" alt="Local Culture">
+                <div class="gallery-overlay">
+                    <p>Rich Cultural Heritage</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1626621341569-d5133c1b7b56?w=800&q=80" alt="Sikkim Landscape">
+                <div class="gallery-overlay">
+                    <p>Beautiful Landscapes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <main>
+            <section class="intro-section">
+                <h2>Shape Your Community</h2>
+                <p>Submit requests for essential amenities your district needs. From gyms to libraries, healthcare to infrastructure—tell us what would improve life in your community.</p>
+            </section>
+
+            <section class="form-section">
+                <form id="amenityForm">
+                    <div class="form-group">
+                        <label for="name">Your Name <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="district">Select District <span class="required">*</span></label>
+                        <select id="district" name="district" required>
+                            <option value="">-- Choose your district --</option>
+                            <option value="Gangtok">Gangtok</option>
+                            <option value="Mangan">Mangan</option>
+                            <option value="Namchi">Namchi</option>
+                            <option value="Gyalshing">Gyalshing</option>
+                            <option value="Pakyong">Pakyong</option>
+                            <option value="Soreng">Soreng</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Specific Location/Area <span class="required">*</span></label>
+                        <input type="text" id="location" name="location" required placeholder="e.g., Main Market, Near School, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type of Amenity Required <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Gym">
+                                <span>Gym/Fitness Center</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Public Toilet">
+                                <span>Public Toilet</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Library">
+                                <span>Library</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Community Center">
+                                <span>Community Center</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Playground">
+                                <span>Playground</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Healthcare Center">
+                                <span>Healthcare Center</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Drinking Water">
+                                <span>Drinking Water Facility</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Street Lighting">
+                                <span>Street Lighting</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="amenity" value="Other">
+                                <span>Other</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="otherAmenityGroup" style="display: none;">
+                        <label for="otherAmenity">Please specify other amenity</label>
+                        <input type="text" id="otherAmenity" name="otherAmenity" placeholder="Specify the amenity">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Detailed Description <span class="required">*</span></label>
+                        <textarea id="description" name="description" rows="5" required placeholder="Please provide details about why this amenity is needed and how it will benefit the community..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="population">Approximate Population Benefiting</label>
+                        <input type="number" id="population" name="population" min="1" placeholder="Estimated number of people who will benefit">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Priority Level <span class="required">*</span></label>
+                        <select id="priority" name="priority" required>
+                            <option value="">-- Select priority --</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                            <option value="Urgent">Urgent</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="consent" name="consent" required>
+                            <span>I confirm that the information provided is accurate and I consent to the processing of this request by the State Government.</span>
+                        </label>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn-submit">Submit Request</button>
+                        <button type="reset" class="btn-reset">Reset Form</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="info-section">
+                <h3>Explore Sikkim's Districts</h3>
+                <div class="districts-grid">
+                    <div class="district-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=80');">
+                        <div class="district-content">
+                            <h4>Gangtok District</h4>
+                            <p>Capital district and administrative center of Sikkim</p>
+                        </div>
+                    </div>
+                    <div class="district-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1626621341721-3ab9d74c7e6d?w=400&q=80');">
+                        <div class="district-content">
+                            <h4>Mangan District</h4>
+                            <p>North Sikkim headquarters with scenic beauty</p>
+                        </div>
+                    </div>
+                    <div class="district-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=400&q=80');">
+                        <div class="district-content">
+                            <h4>Namchi District</h4>
+                            <p>South Sikkim headquarters known for its culture</p>
+                        </div>
+                    </div>
+                    <div class="district-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1626621341569-d5133c1b7b56?w=400&q=80');">
+                        <div class="district-content">
+                            <h4>Gyalshing District</h4>
+                            <p>West Sikkim headquarters with rich heritage</p>
+                        </div>
+                    </div>
+                    <div class="district-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=400&q=80');">
+                        <div class="district-content">
+                            <h4>Pakyong District</h4>
+                            <p>Newly formed district in East Sikkim</p>
+                        </div>
+                    </div>
+                    <div class="district-card" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=80');">
+                        <div class="district-content">
+                            <h4>Soreng District</h4>
+                            <p>Newly formed district in West Sikkim</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 What Sikkimese Want! · Government of Sikkim</p>
+            <p>For queries, contact: hello@whatsikkimesewant.gov.in</p>
+        </footer>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Request Submitted</h2>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
