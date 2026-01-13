@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Dynamic API URL - works on localhost and production
+    const API_BASE = window.location.origin;
+
     const form = document.getElementById('amenityForm');
     const modal = document.getElementById('modal');
     const closeModal = document.querySelector('.close');
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
 
-            const response = await fetch('http://localhost:3000/api/requests', {
+            const response = await fetch(`${API_BASE}/api/requests`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -93,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Error submitting request:', error);
-            alert('Error: Could not connect to server. Please ensure the server is running at http://localhost:3000');
+            alert('Error: Could not connect to server. Please try again later.');
 
             // Restore button
             const submitBtn = document.querySelector('.btn-submit');
@@ -169,5 +172,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
-    console.log('Backend API: http://localhost:3000/api');
+    console.log('Backend API:', API_BASE + '/api');
 });
