@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function submitRequest(data) {
         try {
             // Show loading state
-            const submitBtn = document.querySelector('.btn-submit');
+            const submitBtn = document.querySelector('.btn-primary');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error: Could not connect to server. Please try again later.');
 
             // Restore button
-            const submitBtn = document.querySelector('.btn-submit');
+            const submitBtn = document.querySelector('.btn-primary');
             submitBtn.textContent = 'Submit Request';
             submitBtn.disabled = false;
         }
