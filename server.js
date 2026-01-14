@@ -275,7 +275,7 @@ app.get('/admin', (req, res) => {
 });
 
 // Start server first, then initialize DB
-app.listen(PORT, async () => {
+app.listen(PORT, '0.0.0.0', async () => {
     console.log(`\n========================================`);
     console.log(`  What Sikkimese Want! - Server Running`);
     console.log(`========================================\n`);
