@@ -265,6 +265,121 @@ document.addEventListener('DOMContentLoaded', function() {
     // Auto-refresh every 30 seconds
     setInterval(fetchLiveRequests, 30000);
 
+    // ==========================================
+    // TRACK STATUS FUNCTIONALITY
+    // ==========================================
+
+    const trackBtn = document.getElementById('trackBtn');
+    const trackInput = document.getElementById('trackReferenceId');
+    const trackResult = document.getElementById('trackResult');
+
+    if (trackBtn) {
+        trackBtn.addEventListener('click', trackRequest);
+        trackInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                trackRequest();
+            }
+        });
+    }
+
+    async function trackRequest() {
+        const referenceId = trackInput.value.trim();
+
+        if (!referenceId) {
+            showTrackError('Please enter a reference ID');
+            return;
+        }
+
+        // Show loading state
+        trackBtn.textContent = 'Tracking...';
+        trackBtn.disabled = true;
+
+        try {
+            const response = await fetch(`${API_BASE}/api/track/${encodeURIComponent(referenceId)}`);
+            const result = await response.json();
+
+            trackBtn.textContent = 'Track Status';
+            trackBtn.disabled = false;
+
+            if (result.success) {
+                showTrackResult(result.request);
+            } else {
+                showTrackError(result.message || 'Request not found');
+            }
+        } catch (error) {
+            console.error('Error tracking request:', error);
+            trackBtn.textContent = 'Track Status';
+            trackBtn.disabled = false;
+            showTrackError('Unable to connect to server. Please try again.');
+        }
+    }
+
+    function showTrackResult(request) {
+        const statusClass = request.status.toLowerCase().replace(' ', '-');
+        const priorityClass = request.priority.toLowerCase();
+        const submittedDate = new Date(request.submittedAt).toLocaleDateString('en-IN', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+        const updatedDate = request.updatedAt
+            ? new Date(request.updatedAt).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            })
+            : 'Not yet updated';
+
+        trackResult.innerHTML = `
+            <div class="track-result-card">
+                <div class="track-result-header">
+                    <h3>Request Found!</h3>
+                    <span class="track-ref-id">${request.referenceId}</span>
+                </div>
+                <div class="track-result-status">
+                    <span class="status-badge status-${statusClass}">${request.status}</span>
+                    <span class="priority-badge priority-${priorityClass}">${request.priority} Priority</span>
+                </div>
+                <div class="track-result-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Location:</span>
+                        <span class="detail-value">${request.location}, ${request.district}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Amenities:</span>
+                        <span class="detail-value">${request.amenities.join(', ')}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Submitted:</span>
+                        <span class="detail-value">${submittedDate}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Last Updated:</span>
+                        <span class="detail-value">${updatedDate}</span>
+                    </div>
+                    ${request.adminNotes ? `
+                    <div class="detail-row admin-notes">
+                        <span class="detail-label">Notes:</span>
+                        <span class="detail-value">${request.adminNotes}</span>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        trackResult.style.display = 'block';
+    }
+
+    function showTrackError(message) {
+        trackResult.innerHTML = `
+            <div class="track-result-error">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+                <p>${message}</p>
+                <small>Please check your reference ID and try again.</small>
+            </div>
+        `;
+        trackResult.style.display = 'block';
+    }
+
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
     console.log('Backend API:', API_BASE + '/api');

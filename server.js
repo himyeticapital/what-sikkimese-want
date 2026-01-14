@@ -158,6 +158,40 @@ app.get('/api/requests/:id', async (req, res) => {
     }
 });
 
+// Track request by reference ID (Public)
+app.get('/api/track/:referenceId', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT reference_id, district, location, amenities, priority, status, admin_notes, submitted_at, updated_at
+             FROM requests WHERE reference_id = $1`,
+            [req.params.referenceId.toUpperCase()]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'No request found with this reference ID' });
+        }
+
+        const request = result.rows[0];
+        res.json({
+            success: true,
+            request: {
+                referenceId: request.reference_id,
+                district: request.district,
+                location: request.location,
+                amenities: request.amenities,
+                priority: request.priority,
+                status: request.status,
+                adminNotes: request.admin_notes,
+                submittedAt: request.submitted_at,
+                updatedAt: request.updated_at
+            }
+        });
+    } catch (error) {
+        console.error('Error tracking request:', error);
+        res.status(500).json({ success: false, message: 'Failed to track request' });
+    }
+});
+
 // Update request (Admin)
 app.put('/api/requests/:id', async (req, res) => {
     try {

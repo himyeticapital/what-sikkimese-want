@@ -1317,3 +1317,313 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================
+   TRACK STATUS SECTION
+   ========================================== */
+
+.track-section {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    padding: 60px 0;
+}
+
+.track-section .section-title {
+    color: var(--bg-white);
+    margin-bottom: 10px;
+}
+
+.track-section .section-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.track-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.track-form {
+    display: flex;
+    gap: 12px;
+    background: var(--bg-white);
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+}
+
+.track-input {
+    flex: 1;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background: transparent;
+    color: var(--text-dark);
+}
+
+.track-input:focus {
+    outline: none;
+}
+
+.track-input::placeholder {
+    color: var(--text-light);
+}
+
+.btn-track {
+    padding: 16px 32px;
+    background: var(--primary);
+    color: var(--bg-white);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-track:hover {
+    background: var(--primary-light);
+}
+
+.btn-track:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.track-result {
+    margin-top: 24px;
+}
+
+.track-result-card {
+    background: var(--bg-white);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+}
+
+.track-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.track-result-header h3 {
+    color: #28a745;
+    font-size: 18px;
+}
+
+.track-ref-id {
+    background: var(--accent);
+    color: var(--primary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: 600;
+}
+
+.track-result-status {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.status-badge, .priority-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.status-badge.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.status-in-progress {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.priority-badge.priority-low {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.priority-badge.priority-medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.priority-badge.priority-high {
+    background: #ffe0b2;
+    color: #e65100;
+}
+
+.priority-badge.priority-urgent {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.track-result-details {
+    display: grid;
+    gap: 12px;
+}
+
+.detail-row {
+    display: flex;
+    gap: 12px;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 120px;
+}
+
+.detail-value {
+    color: var(--text-dark);
+}
+
+.detail-row.admin-notes {
+    background: var(--accent);
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+.track-result-error {
+    background: var(--bg-white);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.track-result-error svg {
+    color: #dc3545;
+    margin-bottom: 12px;
+}
+
+.track-result-error p {
+    color: #dc3545;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.track-result-error small {
+    color: var(--text-muted);
+}
+
+/* ==========================================
+   GUIDELINES SECTION
+   ========================================== */
+
+.guidelines-section {
+    background: var(--bg-white);
+    padding: 60px 0;
+}
+
+.guidelines-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.guideline-card {
+    background: var(--bg-light);
+    padding: 30px 24px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.guideline-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.guideline-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.guideline-icon svg {
+    color: var(--bg-white);
+}
+
+.guideline-card h3 {
+    color: var(--primary-dark);
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.guideline-card p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Responsive for Track and Guidelines */
+@media (max-width: 992px) {
+    .guidelines-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .track-form {
+        flex-direction: column;
+    }
+
+    .btn-track {
+        width: 100%;
+    }
+
+    .track-result-header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .track-result-status {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .detail-label {
+        min-width: auto;
+    }
+
+    .guidelines-grid {
+        grid-template-columns: 1fr;
+    }
+}
