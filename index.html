@@ -39,14 +39,17 @@
                 </div>
             </div>
             <div class="header-actions">
-                <div class="search-box">
-                    <input type="text" placeholder="Search services..." aria-label="Search">
-                    <button type="button" aria-label="Search">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </button>
+                <div class="search-box-container">
+                    <div class="search-box">
+                        <input type="text" id="headerSearchInput" placeholder="Search services..." aria-label="Search" autocomplete="off">
+                        <button type="button" aria-label="Search">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="searchSuggestions" class="search-suggestions" style="display: none;"></div>
                 </div>
                 <a href="admin.html" class="admin-link">Admin Portal</a>
             </div>
@@ -97,6 +100,35 @@
             <h2>Your Voice. Your District. Your Future.</h2>
             <p>Request essential amenities for your community and help shape the development of Sikkim</p>
             <a href="#request-form" class="hero-cta">Submit a Request</a>
+        </div>
+    </section>
+
+    <!-- Live Requests Feed Section -->
+    <section class="live-feed-section">
+        <div class="section-container">
+            <div class="live-feed-header">
+                <h2 class="section-title">
+                    <span class="live-indicator"></span>
+                    Live Community Requests
+                </h2>
+                <p class="live-feed-subtitle">See what your fellow Sikkimese are requesting in real-time</p>
+            </div>
+            <div class="live-feed-container">
+                <div id="liveFeed" class="live-feed">
+                    <div class="loading-spinner">Loading requests...</div>
+                </div>
+            </div>
+            <div class="live-feed-footer">
+                <span id="requestCount">0 requests</span> submitted so far
+                <button id="refreshFeed" class="refresh-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
         </div>
     </section>
 
@@ -259,35 +291,6 @@
                         <p>Approved requests are compiled into proposals and submitted to relevant authorities. We continue to follow up until the amenity is sanctioned or we receive a formal response.</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Live Requests Feed Section -->
-    <section class="live-feed-section">
-        <div class="section-container">
-            <div class="live-feed-header">
-                <h2 class="section-title">
-                    <span class="live-indicator"></span>
-                    Live Community Requests
-                </h2>
-                <p class="live-feed-subtitle">See what your fellow Sikkimese are requesting in real-time</p>
-            </div>
-            <div class="live-feed-container">
-                <div id="liveFeed" class="live-feed">
-                    <div class="loading-spinner">Loading requests...</div>
-                </div>
-            </div>
-            <div class="live-feed-footer">
-                <span id="requestCount">0 requests</span> submitted so far
-                <button id="refreshFeed" class="refresh-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 4v6h-6"></path>
-                        <path d="M1 20v-6h6"></path>
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                    </svg>
-                    Refresh
-                </button>
             </div>
         </div>
     </section>

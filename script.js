@@ -20,32 +20,121 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================
-    // SEARCH FUNCTIONALITY
+    // SEARCH FUNCTIONALITY WITH AUTOCOMPLETE
     // ==========================================
-    const searchInput = document.querySelector('.search-box input');
+    const searchInput = document.getElementById('headerSearchInput');
     const searchButton = document.querySelector('.search-box button');
+    const searchSuggestions = document.getElementById('searchSuggestions');
 
     const searchableItems = [
-        { name: 'Submit Request', section: '#request-form', keywords: ['submit', 'request', 'form', 'amenity', 'new'] },
-        { name: 'Track Status', section: '#track', keywords: ['track', 'status', 'reference', 'id', 'check'] },
-        { name: 'Guidelines', section: '#guidelines', keywords: ['guidelines', 'how', 'works', 'faq', 'help', 'process'] },
-        { name: 'Districts', section: '#districts', keywords: ['district', 'gangtok', 'mangan', 'namchi', 'gyalshing', 'pakyong', 'soreng'] },
-        { name: 'Gym', section: '#request-form', keywords: ['gym', 'fitness', 'exercise', 'workout'] },
-        { name: 'Library', section: '#request-form', keywords: ['library', 'books', 'reading'] },
-        { name: 'Public Toilet', section: '#request-form', keywords: ['toilet', 'bathroom', 'restroom', 'sanitation'] },
-        { name: 'Community Center', section: '#request-form', keywords: ['community', 'center', 'hall', 'gathering'] },
-        { name: 'Healthcare', section: '#request-form', keywords: ['health', 'hospital', 'clinic', 'medical', 'doctor'] },
-        { name: 'Playground', section: '#request-form', keywords: ['playground', 'park', 'children', 'play'] },
-        { name: 'Street Light', section: '#request-form', keywords: ['street', 'light', 'lighting', 'lamp'] },
-        { name: 'Water Supply', section: '#request-form', keywords: ['water', 'supply', 'drinking', 'tap'] },
-        { name: 'Stray Dog Vaccination', section: '#request-form', keywords: ['dog', 'stray', 'vaccination', 'animal', 'rabies'] },
-        { name: 'Contact', section: '.contact-card', keywords: ['contact', 'phone', 'email', 'whatsapp'] },
-        { name: 'Volunteer', section: '#guidelines', keywords: ['volunteer', 'help', 'join', 'contribute'] }
+        { name: 'Submit Request', desc: 'Submit a new amenity request', section: '#request-form', keywords: ['submit', 'request', 'form', 'amenity', 'new'], icon: 'file-plus' },
+        { name: 'Track Status', desc: 'Check your request status', section: '#track', keywords: ['track', 'status', 'reference', 'id', 'check'], icon: 'clock' },
+        { name: 'Guidelines', desc: 'How the process works', section: '#guidelines', keywords: ['guidelines', 'how', 'works', 'faq', 'help', 'process'], icon: 'book' },
+        { name: 'Districts', desc: 'Explore Sikkim districts', section: '#districts', keywords: ['district', 'gangtok', 'mangan', 'namchi', 'gyalshing', 'pakyong', 'soreng'], icon: 'map-pin' },
+        { name: 'Gym', desc: 'Request gym/fitness center', section: '#request-form', keywords: ['gym', 'fitness', 'exercise', 'workout'], icon: 'activity' },
+        { name: 'Library', desc: 'Request library facility', section: '#request-form', keywords: ['library', 'books', 'reading'], icon: 'book-open' },
+        { name: 'Public Toilet', desc: 'Request public toilet', section: '#request-form', keywords: ['toilet', 'bathroom', 'restroom', 'sanitation'], icon: 'home' },
+        { name: 'Community Center', desc: 'Request community center', section: '#request-form', keywords: ['community', 'center', 'hall', 'gathering'], icon: 'users' },
+        { name: 'Healthcare', desc: 'Request healthcare facility', section: '#request-form', keywords: ['health', 'hospital', 'clinic', 'medical', 'doctor'], icon: 'heart' },
+        { name: 'Playground', desc: 'Request playground/park', section: '#request-form', keywords: ['playground', 'park', 'children', 'play'], icon: 'sun' },
+        { name: 'Street Light', desc: 'Request street lighting', section: '#request-form', keywords: ['street', 'light', 'lighting', 'lamp'], icon: 'zap' },
+        { name: 'Water Supply', desc: 'Request water facility', section: '#request-form', keywords: ['water', 'supply', 'drinking', 'tap'], icon: 'droplet' },
+        { name: 'Stray Dog Vaccination', desc: 'Request vaccination drive', section: '#request-form', keywords: ['dog', 'stray', 'vaccination', 'animal', 'rabies'], icon: 'shield' },
+        { name: 'Contact', desc: 'Get in touch with us', section: '.contact-card', keywords: ['contact', 'phone', 'email', 'whatsapp'], icon: 'mail' },
+        { name: 'Volunteer', desc: 'Join volunteer network', section: '#volunteer', keywords: ['volunteer', 'help', 'join', 'contribute'], icon: 'user-plus' }
     ];
+
+    // Icon SVG paths
+    const iconPaths = {
+        'file-plus': 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M12 18v-6 M9 15h6',
+        'clock': 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z M12 6v6l4 2',
+        'book': 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20 M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z',
+        'map-pin': 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+        'activity': 'M22 12h-4l-3 9L9 3l-3 9H2',
+        'book-open': 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z',
+        'home': 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10',
+        'users': 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75',
+        'heart': 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z',
+        'sun': 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z',
+        'zap': 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
+        'droplet': 'M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z',
+        'shield': 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+        'mail': 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6',
+        'user-plus': 'M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M12.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M20 8v6 M23 11h-6'
+    };
+
+    // Show suggestions based on input
+    function showSuggestions(query) {
+        if (!query || query.length < 2) {
+            searchSuggestions.style.display = 'none';
+            return;
+        }
+
+        query = query.toLowerCase();
+        const matches = [];
+
+        searchableItems.forEach(item => {
+            let score = 0;
+            if (item.name.toLowerCase().includes(query)) score += 10;
+            item.keywords.forEach(keyword => {
+                if (keyword.includes(query) || query.includes(keyword)) score += 5;
+            });
+            if (score > 0) {
+                matches.push({ ...item, score });
+            }
+        });
+
+        matches.sort((a, b) => b.score - a.score);
+        const topMatches = matches.slice(0, 6);
+
+        if (topMatches.length > 0) {
+            searchSuggestions.innerHTML = topMatches.map(item => `
+                <div class="suggestion-item" data-section="${item.section}">
+                    <svg class="suggestion-item-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="${iconPaths[item.icon] || iconPaths['file-plus']}"></path>
+                    </svg>
+                    <div class="suggestion-item-text">
+                        <div class="suggestion-item-name">${item.name}</div>
+                        <div class="suggestion-item-desc">${item.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+            searchSuggestions.style.display = 'block';
+
+            // Add click handlers to suggestions
+            document.querySelectorAll('.suggestion-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    navigateToSection(section);
+                    searchInput.value = '';
+                    searchSuggestions.style.display = 'none';
+                });
+            });
+        } else {
+            searchSuggestions.style.display = 'none';
+        }
+    }
+
+    // Navigate to section with highlight effect
+    function navigateToSection(section) {
+        const target = document.querySelector(section);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Flash highlight effect
+            target.style.transition = 'box-shadow 0.3s';
+            target.style.boxShadow = '0 0 20px rgba(0, 119, 162, 0.5)';
+            setTimeout(() => {
+                target.style.boxShadow = '';
+            }, 2000);
+        }
+    }
 
     function performSearch() {
         const query = searchInput.value.toLowerCase().trim();
         if (!query) return;
+
+        // Hide suggestions
+        searchSuggestions.style.display = 'none';
 
         // Find matching item
         let bestMatch = null;
@@ -64,32 +153,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (bestMatch && bestScore > 0) {
-            const target = document.querySelector(bestMatch.section);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                searchInput.value = '';
-                // Flash highlight effect
-                target.style.transition = 'box-shadow 0.3s';
-                target.style.boxShadow = '0 0 20px rgba(0, 119, 162, 0.5)';
-                setTimeout(() => {
-                    target.style.boxShadow = '';
-                }, 2000);
-            }
+            navigateToSection(bestMatch.section);
+            searchInput.value = '';
         } else {
             alert('No results found. Try searching for: gym, library, track, districts, etc.');
         }
     }
 
-    if (searchButton) {
-        searchButton.addEventListener('click', performSearch);
-    }
+    // Event listeners for search
     if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            showSuggestions(e.target.value);
+        });
+
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 performSearch();
             }
         });
+
+        searchInput.addEventListener('focus', function() {
+            if (this.value.length >= 2) {
+                showSuggestions(this.value);
+            }
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                searchSuggestions.style.display = 'none';
+            }
+        });
+    }
+
+    if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
     }
 
     const form = document.getElementById('amenityForm');
