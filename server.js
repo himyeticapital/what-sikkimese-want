@@ -274,8 +274,16 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Start server first, then initialize DB
-app.listen(PORT, '0.0.0.0', async () => {
+// Health check endpoint for Railway
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
+// Initialize database (don't await, let it run in background)
+initDB().catch(err => console.error('DB init error:', err));
+
+// Start server
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n========================================`);
     console.log(`  What Sikkimese Want! - Server Running`);
     console.log(`========================================\n`);
@@ -284,9 +292,6 @@ app.listen(PORT, '0.0.0.0', async () => {
     console.log(`    Username: admin`);
     console.log(`    Password: admin123`);
     console.log(`\n========================================\n`);
-
-    // Initialize database after server starts
-    await initDB();
 });
 
 // Graceful shutdown
