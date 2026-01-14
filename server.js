@@ -274,18 +274,19 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Initialize DB and start server
-initDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`\n========================================`);
-        console.log(`  What Sikkimese Want! - Server Running`);
-        console.log(`========================================\n`);
-        console.log(`  Server running on port ${PORT}`);
-        console.log(`\n  Admin Credentials:`);
-        console.log(`    Username: admin`);
-        console.log(`    Password: admin123`);
-        console.log(`\n========================================\n`);
-    });
+// Start server first, then initialize DB
+app.listen(PORT, async () => {
+    console.log(`\n========================================`);
+    console.log(`  What Sikkimese Want! - Server Running`);
+    console.log(`========================================\n`);
+    console.log(`  Server running on port ${PORT}`);
+    console.log(`\n  Admin Credentials:`);
+    console.log(`    Username: admin`);
+    console.log(`    Password: admin123`);
+    console.log(`\n========================================\n`);
+
+    // Initialize database after server starts
+    await initDB();
 });
 
 // Graceful shutdown
