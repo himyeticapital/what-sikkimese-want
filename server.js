@@ -279,19 +279,12 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
 });
 
-// Initialize database (don't await, let it run in background)
-initDB().catch(err => console.error('DB init error:', err));
+// Start server first
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
 
-// Start server
-const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`\n========================================`);
-    console.log(`  What Sikkimese Want! - Server Running`);
-    console.log(`========================================\n`);
-    console.log(`  Server running on port ${PORT}`);
-    console.log(`\n  Admin Credentials:`);
-    console.log(`    Username: admin`);
-    console.log(`    Password: admin123`);
-    console.log(`\n========================================\n`);
+    // Initialize database after server starts
+    initDB().catch(err => console.error('DB init error:', err));
 });
 
 // Graceful shutdown
