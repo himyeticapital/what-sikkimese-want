@@ -1627,3 +1627,403 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================
+   PROCESS TIMELINE (Guidelines Section)
+   ========================================== */
+
+.guidelines-section .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-size: 18px;
+}
+
+.process-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+}
+
+.process-step {
+    position: relative;
+    background: var(--bg-light);
+    border-radius: 12px;
+    padding: 30px 24px;
+    text-align: left;
+}
+
+.process-step::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    right: -24px;
+    width: 24px;
+    height: 2px;
+    background: var(--primary);
+    display: block;
+}
+
+.process-step:last-child::after {
+    display: none;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.step-content h3 {
+    color: var(--primary-dark);
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.step-content p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.step-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.step-checklist li {
+    position: relative;
+    padding-left: 24px;
+    color: var(--text-body);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.step-checklist li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* FAQ Section */
+.faq-section {
+    background: var(--bg-light);
+    border-radius: 16px;
+    padding: 40px;
+}
+
+.faq-title {
+    text-align: center;
+    color: var(--primary-dark);
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.faq-item {
+    background: var(--bg-white);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.faq-item h4 {
+    color: var(--primary);
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.faq-item p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   DISTRICT MODAL STYLES
+   ========================================== */
+
+.district-modal .modal-content {
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.district-modal-header {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.district-modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.district-modal-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+}
+
+.district-modal-title h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.district-region-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.district-modal-body {
+    padding: 30px;
+}
+
+.district-about h3 {
+    color: var(--primary-dark);
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.district-about p {
+    color: var(--text-body);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.district-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    padding: 20px;
+    background: var(--bg-light);
+    border-radius: 12px;
+}
+
+.district-stat {
+    text-align: center;
+    flex: 1;
+}
+
+.district-stat .stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.district-stat .stat-label {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.district-requests {
+    margin-top: 30px;
+}
+
+.district-requests h3 {
+    color: var(--primary-dark);
+    font-size: 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.district-requests-list {
+    max-height: 400px;
+    overflow-y: auto;
+    display: grid;
+    gap: 12px;
+}
+
+.district-request-item {
+    background: var(--bg-light);
+    border-radius: 10px;
+    padding: 16px;
+    border-left: 4px solid var(--primary);
+}
+
+.request-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.request-name {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.request-time {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.request-item-body {
+    margin-bottom: 12px;
+}
+
+.request-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.request-amenities {
+    color: var(--text-body);
+    font-size: 14px;
+}
+
+.request-item-footer {
+    display: flex;
+    gap: 8px;
+}
+
+.status-tag, .priority-tag {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-tag.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-tag.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-tag.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-tag.status-in-progress {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.priority-tag.priority-low {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.priority-tag.priority-medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.priority-tag.priority-high {
+    background: #ffe0b2;
+    color: #e65100;
+}
+
+.priority-tag.priority-urgent {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.no-requests {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 16px;
+}
+
+.district-modal-footer {
+    padding: 20px 30px 30px;
+    text-align: center;
+    border-top: 1px solid var(--border-light);
+}
+
+.district-modal-footer .btn-primary {
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* Responsive for Process Timeline and District Modal */
+@media (max-width: 1200px) {
+    .process-timeline {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-step:nth-child(2)::after,
+    .process-step:nth-child(4)::after {
+        display: none;
+    }
+}
+
+@media (max-width: 992px) {
+    .faq-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .process-timeline {
+        grid-template-columns: 1fr;
+    }
+
+    .process-step::after {
+        display: none;
+    }
+
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-section {
+        padding: 24px;
+    }
+
+    .district-modal-header {
+        height: 180px;
+    }
+
+    .district-modal-title h2 {
+        font-size: 22px;
+    }
+
+    .district-stats {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .district-stat .stat-value {
+        font-size: 24px;
+    }
+}

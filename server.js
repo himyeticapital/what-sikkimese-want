@@ -275,6 +275,60 @@ app.get('/api/requests/public/recent', async (req, res) => {
     }
 });
 
+// Get requests by district (Public)
+app.get('/api/districts/:district/requests', async (req, res) => {
+    try {
+        const district = req.params.district;
+        const limit = parseInt(req.query.limit) || 20;
+
+        // Get requests for this district
+        const requestsResult = await pool.query(
+            `SELECT id, reference_id, name, location, amenities, priority, status, submitted_at
+             FROM requests WHERE LOWER(district) = LOWER($1) ORDER BY submitted_at DESC LIMIT $2`,
+            [district, limit]
+        );
+
+        // Get stats for this district
+        const totalResult = await pool.query(
+            'SELECT COUNT(*) FROM requests WHERE LOWER(district) = LOWER($1)',
+            [district]
+        );
+        const pendingResult = await pool.query(
+            "SELECT COUNT(*) FROM requests WHERE LOWER(district) = LOWER($1) AND status = 'Pending'",
+            [district]
+        );
+        const approvedResult = await pool.query(
+            "SELECT COUNT(*) FROM requests WHERE LOWER(district) = LOWER($1) AND status = 'Approved'",
+            [district]
+        );
+
+        const requests = requestsResult.rows.map(r => ({
+            id: r.id,
+            referenceId: r.reference_id,
+            name: r.name.split(' ')[0] + ' ' + r.name.split(' ').slice(1).map(n => n[0] + '.').join(''),
+            location: r.location,
+            amenities: r.amenities,
+            priority: r.priority,
+            status: r.status,
+            submittedAt: r.submitted_at
+        }));
+
+        res.json({
+            success: true,
+            district: district,
+            stats: {
+                total: parseInt(totalResult.rows[0].count),
+                pending: parseInt(pendingResult.rows[0].count),
+                approved: parseInt(approvedResult.rows[0].count)
+            },
+            requests: requests
+        });
+    } catch (error) {
+        console.error('Error fetching district requests:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch district requests' });
+    }
+});
+
 // Get statistics (Admin Dashboard)
 app.get('/api/stats', async (req, res) => {
     try {
