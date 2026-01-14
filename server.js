@@ -29,6 +29,7 @@ async function initDB() {
                 email VARCHAR(255) NOT NULL,
                 phone VARCHAR(50) NOT NULL,
                 district VARCHAR(100) NOT NULL,
+                gpu VARCHAR(255),
                 location VARCHAR(255) NOT NULL,
                 amenities TEXT[] NOT NULL,
                 other_amenity VARCHAR(255),
@@ -40,6 +41,16 @@ async function initDB() {
                 submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP
             )
+        `);
+
+        // Add gpu column if it doesn't exist (for existing databases)
+        await pool.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='requests' AND column_name='gpu') THEN
+                    ALTER TABLE requests ADD COLUMN gpu VARCHAR(255);
+                END IF;
+            END $$;
         `);
 
         await pool.query(`
@@ -79,6 +90,7 @@ app.post('/api/requests', async (req, res) => {
             email,
             phone,
             district,
+            gpu,
             location,
             amenities,
             otherAmenity,
@@ -90,10 +102,10 @@ app.post('/api/requests', async (req, res) => {
         const referenceId = generateReferenceId();
 
         const result = await pool.query(
-            `INSERT INTO requests (reference_id, name, email, phone, district, location, amenities, other_amenity, description, population, priority)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            `INSERT INTO requests (reference_id, name, email, phone, district, gpu, location, amenities, other_amenity, description, population, priority)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
              RETURNING id, reference_id`,
-            [referenceId, name, email, phone, district, location, amenities, otherAmenity || null, description, population || null, priority]
+            [referenceId, name, email, phone, district, gpu || null, location, amenities, otherAmenity || null, description, population || null, priority]
         );
 
         res.json({

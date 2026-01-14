@@ -2,12 +2,177 @@ document.addEventListener('DOMContentLoaded', function() {
     // Dynamic API URL - works on localhost and production
     const API_BASE = window.location.origin;
 
+    // ==========================================
+    // HERO BACKGROUND SLIDESHOW
+    // ==========================================
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+
+    function nextHeroSlide() {
+        heroSlides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % heroSlides.length;
+        heroSlides[currentSlide].classList.add('active');
+    }
+
+    // Change slide every 5 seconds
+    if (heroSlides.length > 0) {
+        setInterval(nextHeroSlide, 5000);
+    }
+
+    // ==========================================
+    // SEARCH FUNCTIONALITY
+    // ==========================================
+    const searchInput = document.querySelector('.search-box input');
+    const searchButton = document.querySelector('.search-box button');
+
+    const searchableItems = [
+        { name: 'Submit Request', section: '#request-form', keywords: ['submit', 'request', 'form', 'amenity', 'new'] },
+        { name: 'Track Status', section: '#track', keywords: ['track', 'status', 'reference', 'id', 'check'] },
+        { name: 'Guidelines', section: '#guidelines', keywords: ['guidelines', 'how', 'works', 'faq', 'help', 'process'] },
+        { name: 'Districts', section: '#districts', keywords: ['district', 'gangtok', 'mangan', 'namchi', 'gyalshing', 'pakyong', 'soreng'] },
+        { name: 'Gym', section: '#request-form', keywords: ['gym', 'fitness', 'exercise', 'workout'] },
+        { name: 'Library', section: '#request-form', keywords: ['library', 'books', 'reading'] },
+        { name: 'Public Toilet', section: '#request-form', keywords: ['toilet', 'bathroom', 'restroom', 'sanitation'] },
+        { name: 'Community Center', section: '#request-form', keywords: ['community', 'center', 'hall', 'gathering'] },
+        { name: 'Healthcare', section: '#request-form', keywords: ['health', 'hospital', 'clinic', 'medical', 'doctor'] },
+        { name: 'Playground', section: '#request-form', keywords: ['playground', 'park', 'children', 'play'] },
+        { name: 'Street Light', section: '#request-form', keywords: ['street', 'light', 'lighting', 'lamp'] },
+        { name: 'Water Supply', section: '#request-form', keywords: ['water', 'supply', 'drinking', 'tap'] },
+        { name: 'Stray Dog Vaccination', section: '#request-form', keywords: ['dog', 'stray', 'vaccination', 'animal', 'rabies'] },
+        { name: 'Contact', section: '.contact-card', keywords: ['contact', 'phone', 'email', 'whatsapp'] },
+        { name: 'Volunteer', section: '#guidelines', keywords: ['volunteer', 'help', 'join', 'contribute'] }
+    ];
+
+    function performSearch() {
+        const query = searchInput.value.toLowerCase().trim();
+        if (!query) return;
+
+        // Find matching item
+        let bestMatch = null;
+        let bestScore = 0;
+
+        searchableItems.forEach(item => {
+            let score = 0;
+            if (item.name.toLowerCase().includes(query)) score += 10;
+            item.keywords.forEach(keyword => {
+                if (keyword.includes(query) || query.includes(keyword)) score += 5;
+            });
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = item;
+            }
+        });
+
+        if (bestMatch && bestScore > 0) {
+            const target = document.querySelector(bestMatch.section);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                searchInput.value = '';
+                // Flash highlight effect
+                target.style.transition = 'box-shadow 0.3s';
+                target.style.boxShadow = '0 0 20px rgba(0, 119, 162, 0.5)';
+                setTimeout(() => {
+                    target.style.boxShadow = '';
+                }, 2000);
+            }
+        } else {
+            alert('No results found. Try searching for: gym, library, track, districts, etc.');
+        }
+    }
+
+    if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+    }
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+    }
+
     const form = document.getElementById('amenityForm');
     const modal = document.getElementById('modal');
     const closeModal = document.querySelector('.close');
     const otherCheckbox = document.querySelector('input[name="amenity"][value="Other"]');
     const otherAmenityGroup = document.getElementById('otherAmenityGroup');
     const amenityCheckboxes = document.querySelectorAll('input[name="amenity"]');
+
+    // ==========================================
+    // GPU (Gram Panchayat Unit) DATA
+    // ==========================================
+    const gpuData = {
+        'Gangtok': [
+            'Aho Yangtam', 'Amba', 'Aritar', 'Assam Lingzey', 'Burtuk', 'Central Pendam',
+            'Cha Misamari', 'Chandmari', 'Chujachen', 'Dalapchand', 'Duga', 'Gnathang Machong',
+            'Kabi Tingda', 'Khamdong', 'Lingdok Nampong', 'Luing Perbing', 'Machong',
+            'Martam Nazitam', 'Nandok', 'Navey Shotak', 'Niya Rongong', 'Pangthang',
+            'Parkha', 'Parakha', 'Pathing', 'Penlong', 'Rakdong Tintek', 'Ranka',
+            'Regu', 'Rey Mindu', 'Rhenock', 'Rumtek', 'Samdong Kambal', 'Sang',
+            'Sirwani', 'Sudunglakha', 'Tanak Sajong', 'Tathangchen', 'Taza',
+            'Timpyem', 'Upper Tadong', 'West Pendam'
+        ],
+        'Mangan': [
+            'Chungthang', 'Dzongu', 'Hee Gyathang', 'Kabi Lungchok', 'Lachen',
+            'Lachung', 'Lum Gor Sangtok', 'Mangan', 'Men Rongong', 'Namok Swayem',
+            'Passingdong', 'Pentong', 'Phensong', 'Ramthang', 'Ringhim Nampatam',
+            'Sakyong Pentong', 'Sentam', 'Shipgyer', 'Singhik', 'Tingchim',
+            'Toong Naga', 'Upper Dzongu'
+        ],
+        'Namchi': [
+            'Assangthang', 'Barfung Zarung', 'Ben Namprik', 'Boomtar', 'Chisopani',
+            'Damthang', 'Jorethang Nayabazar', 'Kabrey Buriakhop', 'Kateng Pamphok',
+            'Kewzing Bakhim', 'Lamting Tingmo', 'Lingmoo Payong', 'Mamley Kamrang',
+            'Maneydara', 'Mellidara', 'Melli', 'Namchi', 'Namthang Maniram',
+            'Namphing', 'Nandugaon', 'Omchung Ralong', 'Perbing Dovan', 'Poklok Denchung',
+            'Ravangla', 'Rayong Sodang', 'Rishi Rabikhola', 'Salghari', 'Sikkip',
+            'Singithang', 'Temi', 'Tendong', 'Tinkitam Rayong', 'Turuk Ramabong',
+            'Upper Boomtar', 'Wak Omchu', 'Yangang'
+        ],
+        'Gyalshing': [
+            'Arithang', 'Berfok', 'Bhareng', 'Buriakhop', 'Chakung',
+            'Chongrang', 'Daramdin', 'Dentam', 'Gyalshing', 'Hee Martam',
+            'Kaluk', 'Khecheopalri', 'Kongri', 'Labdang', 'Legship',
+            'Lingchom', 'Lungzik', 'Maneybong', 'Naku Chumbong', 'Okhrey',
+            'Pelling', 'Rinchenpong', 'Sangadorji', 'Siktam', 'Singyang Chumbung',
+            'Sopakha', 'Tashiding', 'Timburbong', 'Uttarey', 'Yuksom', 'Yuksam Dubdi'
+        ],
+        'Pakyong': [
+            'Aho Yangtam', 'Amba Dara', 'Dikling Karthok', 'Dung Dung Pakyong',
+            'Latuk Machong', 'Lower Khamdong', 'Machong', 'Namcheybong',
+            'Naitam Nandok', 'Pachey', 'Pakyong', 'Parkha', 'Pathing',
+            'Rhenock', 'Riwa Parkha', 'Thekabung', 'Timing Namrang', 'West Pakyong'
+        ],
+        'Soreng': [
+            'Chumbong', 'Daramdin', 'Gelling Barapathing', 'Hee', 'Kaluk Rinchenpong',
+            'Karmatar', 'Malbasey', 'Melli Dara Paiyong', 'Naku Chumbong', 'Okhrey',
+            'Reshi', 'Rinchenpong', 'Rumbuk', 'Salghari', 'Sombaria',
+            'Soreng', 'Timburbong', 'Zoom'
+        ]
+    };
+
+    // Populate GPU dropdown based on district selection
+    const districtSelect = document.getElementById('district');
+    const gpuSelect = document.getElementById('gpu');
+
+    if (districtSelect && gpuSelect) {
+        districtSelect.addEventListener('change', function() {
+            const selectedDistrict = this.value;
+            gpuSelect.innerHTML = '<option value="">-- Select GPU --</option>';
+
+            if (selectedDistrict && gpuData[selectedDistrict]) {
+                gpuData[selectedDistrict].forEach(gpu => {
+                    const option = document.createElement('option');
+                    option.value = gpu;
+                    option.textContent = gpu;
+                    gpuSelect.appendChild(option);
+                });
+            } else {
+                gpuSelect.innerHTML = '<option value="">-- Select district first --</option>';
+            }
+        });
+    }
 
     // Show/hide "Other" amenity input field
     amenityCheckboxes.forEach(checkbox => {
@@ -52,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
             email: document.getElementById('email').value,
             phone: document.getElementById('phone').value,
             district: document.getElementById('district').value,
+            gpu: document.getElementById('gpu').value,
             location: document.getElementById('location').value,
             amenities: selectedAmenities,
             otherAmenity: document.getElementById('otherAmenity').value,

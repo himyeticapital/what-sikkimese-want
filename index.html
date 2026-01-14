@@ -86,6 +86,12 @@
 
     <!-- Hero Banner -->
     <section class="hero-banner">
+        <div class="hero-slides">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1920&q=80')"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1615966192539-f1731963b19a?w=1920&q=80')"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1600402808924-9c591a6dace8?w=1920&q=80')"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1573398643956-2b9e6ade3456?w=1920&q=80')"></div>
+        </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h2>Your Voice. Your District. Your Future.</h2>
@@ -328,9 +334,18 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="location">Specific Location/Area <span class="required">*</span></label>
-                            <input type="text" id="location" name="location" required placeholder="e.g., Main Market, Near School, etc.">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gpu">Select GPU (Gram Panchayat Unit)</label>
+                                <select id="gpu" name="gpu">
+                                    <option value="">-- Select district first --</option>
+                                </select>
+                                <small class="form-hint">Select your district to see available GPUs</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Specific Location/Area <span class="required">*</span></label>
+                                <input type="text" id="location" name="location" required placeholder="e.g., Main Market, Near School, etc.">
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -367,6 +382,10 @@
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="amenity" value="Street Lighting">
                                     <span>Street Lighting</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="amenity" value="Stray Dog Vaccination">
+                                    <span>Stray Dog Vaccination</span>
                                 </label>
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="amenity" value="Other">
@@ -419,30 +438,6 @@
 
             <!-- Right Sidebar -->
             <aside class="content-sidebar">
-                <!-- News & Updates -->
-                <div class="sidebar-card">
-                    <h3 class="sidebar-title">Latest Updates</h3>
-                    <ul class="news-list">
-                        <li>
-                            <span class="news-date">Jan 13, 2026</span>
-                            <a href="#">New community center approved for Gangtok East</a>
-                        </li>
-                        <li>
-                            <span class="news-date">Jan 10, 2026</span>
-                            <a href="#">Street lighting project completed in Namchi</a>
-                        </li>
-                        <li>
-                            <span class="news-date">Jan 08, 2026</span>
-                            <a href="#">Healthcare center construction begins in Mangan</a>
-                        </li>
-                        <li>
-                            <span class="news-date">Jan 05, 2026</span>
-                            <a href="#">Public consultation scheduled for Gyalshing</a>
-                        </li>
-                    </ul>
-                    <a href="#" class="view-all-link">View all updates</a>
-                </div>
-
                 <!-- Community Links -->
                 <div class="sidebar-card">
                     <h3 class="sidebar-title">Community Resources</h3>

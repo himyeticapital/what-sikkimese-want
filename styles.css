@@ -312,14 +312,45 @@ body {
 .hero-banner {
     position: relative;
     height: 400px;
-    background-image: linear-gradient(rgba(0, 61, 77, 0.7), rgba(0, 88, 122, 0.8)),
-                      url('https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1920&q=80');
-    background-size: cover;
-    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
+}
+
+.hero-slides {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 61, 77, 0.7), rgba(0, 88, 122, 0.8));
+    z-index: 1;
 }
 
 .hero-banner .hero-content {
@@ -749,6 +780,14 @@ body {
 .form-group input::placeholder,
 .form-group textarea::placeholder {
     color: var(--text-light);
+}
+
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text-light);
+    font-style: italic;
 }
 
 .checkbox-group {
@@ -1764,8 +1803,10 @@ body {
 .district-modal .modal-content {
     max-width: 900px;
     max-height: 90vh;
-    overflow-y: auto;
+    overflow: hidden;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .district-modal-header {
@@ -1804,6 +1845,9 @@ body {
 
 .district-modal-body {
     padding: 30px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .district-about h3 {
@@ -1965,9 +2009,11 @@ body {
 }
 
 .district-modal-footer {
-    padding: 20px 30px 30px;
+    padding: 20px 30px;
     text-align: center;
     border-top: 1px solid var(--border-light);
+    background: var(--bg-white);
+    flex-shrink: 0;
 }
 
 .district-modal-footer .btn-primary {
