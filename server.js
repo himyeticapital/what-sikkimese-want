@@ -1,39 +1,66 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+const { Pool } = require('pg');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
-// Database file paths
-const DB_FILE = path.join(__dirname, 'data.json');
+// PostgreSQL connection
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+});
 
-// Initialize database
-function initDB() {
-    if (!fs.existsSync(DB_FILE)) {
-        const initialData = {
-            requests: [],
-            admins: [{ id: 1, username: 'admin', password: 'admin123' }]
-        };
-        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
+// Initialize database tables
+async function initDB() {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS requests (
+                id SERIAL PRIMARY KEY,
+                reference_id VARCHAR(50) UNIQUE NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                phone VARCHAR(50) NOT NULL,
+                district VARCHAR(100) NOT NULL,
+                location VARCHAR(255) NOT NULL,
+                amenities TEXT[] NOT NULL,
+                other_amenity VARCHAR(255),
+                description TEXT NOT NULL,
+                population INTEGER,
+                priority VARCHAR(50) NOT NULL,
+                status VARCHAR(50) DEFAULT 'Pending',
+                admin_notes TEXT,
+                submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP
+            )
+        `);
+
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS admins (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(100) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        `);
+
+        // Insert default admin if not exists
+        const adminCheck = await pool.query('SELECT * FROM admins WHERE username = $1', ['admin']);
+        if (adminCheck.rows.length === 0) {
+            await pool.query('INSERT INTO admins (username, password) VALUES ($1, $2)', ['admin', 'admin123']);
+        }
+
+        console.log('Database initialized successfully');
+    } catch (error) {
+        console.error('Error initializing database:', error);
     }
-    return JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
 }
-
-// Save database
-function saveDB(data) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-}
-
-// Initialize on startup
-let db = initDB();
 
 // Helper function to generate reference ID
 function generateReferenceId() {
@@ -45,7 +72,7 @@ function generateReferenceId() {
 // API Routes
 
 // Submit new request
-app.post('/api/requests', (req, res) => {
+app.post('/api/requests', async (req, res) => {
     try {
         const {
             name,
@@ -61,34 +88,18 @@ app.post('/api/requests', (req, res) => {
         } = req.body;
 
         const referenceId = generateReferenceId();
-        const submittedAt = new Date().toISOString();
 
-        const newRequest = {
-            id: db.requests.length + 1,
-            reference_id: referenceId,
-            name,
-            email,
-            phone,
-            district,
-            location,
-            amenities: amenities,
-            other_amenity: otherAmenity || null,
-            description,
-            population: population || null,
-            priority,
-            status: 'Pending',
-            admin_notes: null,
-            submitted_at: submittedAt,
-            updated_at: null
-        };
-
-        db.requests.push(newRequest);
-        saveDB(db);
+        const result = await pool.query(
+            `INSERT INTO requests (reference_id, name, email, phone, district, location, amenities, other_amenity, description, population, priority)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+             RETURNING id, reference_id`,
+            [referenceId, name, email, phone, district, location, amenities, otherAmenity || null, description, population || null, priority]
+        );
 
         res.json({
             success: true,
-            referenceId,
-            id: newRequest.id,
+            referenceId: result.rows[0].reference_id,
+            id: result.rows[0].id,
             message: 'Request submitted successfully'
         });
     } catch (error) {
@@ -98,25 +109,33 @@ app.post('/api/requests', (req, res) => {
 });
 
 // Get all requests (Admin)
-app.get('/api/requests', (req, res) => {
+app.get('/api/requests', async (req, res) => {
     try {
         const { status, district, priority } = req.query;
-        let requests = [...db.requests];
+        let query = 'SELECT * FROM requests WHERE 1=1';
+        const params = [];
+        let paramIndex = 1;
 
         if (status) {
-            requests = requests.filter(r => r.status === status);
+            query += ` AND status = $${paramIndex}`;
+            params.push(status);
+            paramIndex++;
         }
         if (district) {
-            requests = requests.filter(r => r.district === district);
+            query += ` AND district = $${paramIndex}`;
+            params.push(district);
+            paramIndex++;
         }
         if (priority) {
-            requests = requests.filter(r => r.priority === priority);
+            query += ` AND priority = $${paramIndex}`;
+            params.push(priority);
+            paramIndex++;
         }
 
-        // Sort by submitted_at descending
-        requests.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+        query += ' ORDER BY submitted_at DESC';
 
-        res.json({ success: true, requests });
+        const result = await pool.query(query, params);
+        res.json({ success: true, requests: result.rows });
     } catch (error) {
         console.error('Error fetching requests:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch requests' });
@@ -124,15 +143,15 @@ app.get('/api/requests', (req, res) => {
 });
 
 // Get single request by ID
-app.get('/api/requests/:id', (req, res) => {
+app.get('/api/requests/:id', async (req, res) => {
     try {
-        const request = db.requests.find(r => r.id === parseInt(req.params.id));
+        const result = await pool.query('SELECT * FROM requests WHERE id = $1', [req.params.id]);
 
-        if (!request) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Request not found' });
         }
 
-        res.json({ success: true, request });
+        res.json({ success: true, request: result.rows[0] });
     } catch (error) {
         console.error('Error fetching request:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch request' });
@@ -140,22 +159,18 @@ app.get('/api/requests/:id', (req, res) => {
 });
 
 // Update request (Admin)
-app.put('/api/requests/:id', (req, res) => {
+app.put('/api/requests/:id', async (req, res) => {
     try {
         const { status, adminNotes } = req.body;
-        const updatedAt = new Date().toISOString();
 
-        const requestIndex = db.requests.findIndex(r => r.id === parseInt(req.params.id));
+        const result = await pool.query(
+            `UPDATE requests SET status = $1, admin_notes = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *`,
+            [status, adminNotes || null, req.params.id]
+        );
 
-        if (requestIndex === -1) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Request not found' });
         }
-
-        db.requests[requestIndex].status = status;
-        db.requests[requestIndex].admin_notes = adminNotes || null;
-        db.requests[requestIndex].updated_at = updatedAt;
-
-        saveDB(db);
 
         res.json({ success: true, message: 'Request updated successfully' });
     } catch (error) {
@@ -165,16 +180,13 @@ app.put('/api/requests/:id', (req, res) => {
 });
 
 // Delete request (Admin)
-app.delete('/api/requests/:id', (req, res) => {
+app.delete('/api/requests/:id', async (req, res) => {
     try {
-        const requestIndex = db.requests.findIndex(r => r.id === parseInt(req.params.id));
+        const result = await pool.query('DELETE FROM requests WHERE id = $1 RETURNING *', [req.params.id]);
 
-        if (requestIndex === -1) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ success: false, message: 'Request not found' });
         }
-
-        db.requests.splice(requestIndex, 1);
-        saveDB(db);
 
         res.json({ success: true, message: 'Request deleted successfully' });
     } catch (error) {
@@ -184,12 +196,12 @@ app.delete('/api/requests/:id', (req, res) => {
 });
 
 // Admin login
-app.post('/api/admin/login', (req, res) => {
+app.post('/api/admin/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        const admin = db.admins.find(a => a.username === username && a.password === password);
+        const result = await pool.query('SELECT * FROM admins WHERE username = $1 AND password = $2', [username, password]);
 
-        if (admin) {
+        if (result.rows.length > 0) {
             res.json({ success: true, message: 'Login successful' });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -201,24 +213,26 @@ app.post('/api/admin/login', (req, res) => {
 });
 
 // Get recent public requests (for live feed)
-app.get('/api/requests/public/recent', (req, res) => {
+app.get('/api/requests/public/recent', async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 10;
 
-        // Get recent requests, sorted by newest first
-        const recentRequests = [...db.requests]
-            .sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at))
-            .slice(0, limit)
-            .map(r => ({
-                id: r.id,
-                name: r.name.split(' ')[0] + ' ' + r.name.split(' ').slice(1).map(n => n[0] + '.').join(''), // Privacy: "John D."
-                district: r.district,
-                location: r.location,
-                amenities: r.amenities,
-                priority: r.priority,
-                status: r.status,
-                submitted_at: r.submitted_at
-            }));
+        const result = await pool.query(
+            `SELECT id, name, district, location, amenities, priority, status, submitted_at
+             FROM requests ORDER BY submitted_at DESC LIMIT $1`,
+            [limit]
+        );
+
+        const recentRequests = result.rows.map(r => ({
+            id: r.id,
+            name: r.name.split(' ')[0] + ' ' + r.name.split(' ').slice(1).map(n => n[0] + '.').join(''),
+            district: r.district,
+            location: r.location,
+            amenities: r.amenities,
+            priority: r.priority,
+            status: r.status,
+            submitted_at: r.submitted_at
+        }));
 
         res.json({ success: true, requests: recentRequests });
     } catch (error) {
@@ -228,36 +242,25 @@ app.get('/api/requests/public/recent', (req, res) => {
 });
 
 // Get statistics (Admin Dashboard)
-app.get('/api/stats', (req, res) => {
+app.get('/api/stats', async (req, res) => {
     try {
-        const totalRequests = db.requests.length;
-        const pendingRequests = db.requests.filter(r => r.status === 'Pending').length;
-        const approvedRequests = db.requests.filter(r => r.status === 'Approved').length;
-        const rejectedRequests = db.requests.filter(r => r.status === 'Rejected').length;
+        const totalResult = await pool.query('SELECT COUNT(*) FROM requests');
+        const pendingResult = await pool.query("SELECT COUNT(*) FROM requests WHERE status = 'Pending'");
+        const approvedResult = await pool.query("SELECT COUNT(*) FROM requests WHERE status = 'Approved'");
+        const rejectedResult = await pool.query("SELECT COUNT(*) FROM requests WHERE status = 'Rejected'");
 
-        // Requests by district
-        const requestsByDistrict = {};
-        db.requests.forEach(r => {
-            requestsByDistrict[r.district] = (requestsByDistrict[r.district] || 0) + 1;
-        });
-        const byDistrict = Object.entries(requestsByDistrict).map(([district, count]) => ({ district, count }));
-
-        // Requests by priority
-        const requestsByPriority = {};
-        db.requests.forEach(r => {
-            requestsByPriority[r.priority] = (requestsByPriority[r.priority] || 0) + 1;
-        });
-        const byPriority = Object.entries(requestsByPriority).map(([priority, count]) => ({ priority, count }));
+        const byDistrictResult = await pool.query('SELECT district, COUNT(*) as count FROM requests GROUP BY district');
+        const byPriorityResult = await pool.query('SELECT priority, COUNT(*) as count FROM requests GROUP BY priority');
 
         res.json({
             success: true,
             stats: {
-                total: totalRequests,
-                pending: pendingRequests,
-                approved: approvedRequests,
-                rejected: rejectedRequests,
-                byDistrict,
-                byPriority
+                total: parseInt(totalResult.rows[0].count),
+                pending: parseInt(pendingResult.rows[0].count),
+                approved: parseInt(approvedResult.rows[0].count),
+                rejected: parseInt(rejectedResult.rows[0].count),
+                byDistrict: byDistrictResult.rows,
+                byPriority: byPriorityResult.rows
             }
         });
     } catch (error) {
@@ -271,21 +274,23 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`\n========================================`);
-    console.log(`  What Sikkimese Want! - Server Running`);
-    console.log(`========================================\n`);
-    console.log(`  User Portal:     http://localhost:${PORT}`);
-    console.log(`  Admin Dashboard: http://localhost:${PORT}/admin`);
-    console.log(`\n  Admin Credentials:`);
-    console.log(`    Username: admin`);
-    console.log(`    Password: admin123`);
-    console.log(`\n========================================\n`);
+// Initialize DB and start server
+initDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`\n========================================`);
+        console.log(`  What Sikkimese Want! - Server Running`);
+        console.log(`========================================\n`);
+        console.log(`  Server running on port ${PORT}`);
+        console.log(`\n  Admin Credentials:`);
+        console.log(`    Username: admin`);
+        console.log(`    Password: admin123`);
+        console.log(`\n========================================\n`);
+    });
 });
 
 // Graceful shutdown
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
     console.log('\nShutting down server...');
+    await pool.end();
     process.exit(0);
 });
