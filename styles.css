@@ -2162,3 +2162,139 @@ body {
         font-size: 24px;
     }
 }
+
+/* ==========================================
+   COMBINED INFO SECTION (About, Volunteer, Feedback)
+   ========================================== */
+
+.combined-info-section {
+    background: var(--bg-light);
+    padding: 60px 0;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.info-card {
+    background: var(--bg-white);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.info-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--accent);
+}
+
+.info-card-content {
+    color: var(--text-body);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.info-card-content p {
+    margin-bottom: 16px;
+}
+
+.info-card-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Feedback card specific styles */
+.info-card .feedback-intro {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.info-card .form-group {
+    margin-bottom: 20px;
+}
+
+.info-card .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+.info-card .form-group input[type="text"],
+.info-card .form-group input[type="email"],
+.info-card .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-medium);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+    background: var(--bg-white);
+}
+
+.info-card .form-group input:focus,
+.info-card .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 119, 162, 0.15);
+}
+
+.info-card .btn-full {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.info-card .btn-full:hover {
+    background: var(--primary-dark);
+}
+
+/* Responsive for Combined Info Section */
+@media (max-width: 1024px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .info-card {
+        padding: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .combined-info-section {
+        padding: 40px 0;
+    }
+
+    .info-card {
+        padding: 24px;
+    }
+
+    .info-card-title {
+        font-size: 20px;
+    }
+}
