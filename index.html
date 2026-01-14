@@ -231,7 +231,7 @@
             </div>
 
             <!-- FAQ Section -->
-            <div class="faq-section">
+            <div id="faq" class="faq-section">
                 <h3 class="faq-title">Frequently Asked Questions</h3>
                 <div class="faq-grid">
                     <div class="faq-item">
@@ -451,22 +451,105 @@
                 </div>
 
                 <!-- Contact Info -->
-                <div class="sidebar-card contact-card">
+                <div id="contact" class="sidebar-card contact-card">
                     <h3 class="sidebar-title">Get In Touch</h3>
                     <p class="contact-text">Questions or want to contribute?</p>
                     <div class="contact-item">
-                        <strong>WhatsApp:</strong> +91 XXXXX XXXXX
+                        <strong>Email:</strong> <a href="mailto:whatsikkimesewant@tutamail.com">whatsikkimesewant@tutamail.com</a>
                     </div>
                     <div class="contact-item">
-                        <strong>Email:</strong> hello@whatsikkimesewant.org
+                        <strong>Instagram:</strong> <a href="https://instagram.com/whatsikkimesewant" target="_blank">@whatsikkimesewant</a>
                     </div>
                     <div class="contact-item">
-                        <strong>Social:</strong> @WhatSikkimeseWant
+                        <strong>YouTube:</strong> <a href="https://youtube.com/@whatsikkimesewant" target="_blank">@whatsikkimesewant</a>
                     </div>
                 </div>
             </aside>
         </div>
     </main>
+
+    <!-- Feedback Section -->
+    <section id="feedback-form" class="feedback-section">
+        <div class="section-container">
+            <h2 class="section-title">Send Us Feedback</h2>
+            <p class="section-subtitle">Help us improve! Share your thoughts, suggestions, or report any issues</p>
+            <div class="feedback-form-container">
+                <form id="feedbackForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="feedbackName">Full Name <span class="required">*</span></label>
+                            <input type="text" id="feedbackName" name="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="feedbackEmail">Email Address <span class="required">*</span></label>
+                            <input type="email" id="feedbackEmail" name="email" required placeholder="your.email@example.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="feedbackPhone">Phone Number</label>
+                            <input type="tel" id="feedbackPhone" name="phone" placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="feedbackDistrict">District</label>
+                            <select id="feedbackDistrict" name="district">
+                                <option value="">-- Select district (optional) --</option>
+                                <option value="Gangtok">Gangtok</option>
+                                <option value="Mangan">Mangan</option>
+                                <option value="Namchi">Namchi</option>
+                                <option value="Gyalshing">Gyalshing</option>
+                                <option value="Pakyong">Pakyong</option>
+                                <option value="Soreng">Soreng</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedbackType">Feedback Type <span class="required">*</span></label>
+                        <select id="feedbackType" name="type" required>
+                            <option value="">-- Select type --</option>
+                            <option value="Suggestion">Suggestion</option>
+                            <option value="Bug Report">Bug Report</option>
+                            <option value="Complaint">Complaint</option>
+                            <option value="Appreciation">Appreciation</option>
+                            <option value="General">General Feedback</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedbackMessage">Your Message <span class="required">*</span></label>
+                        <textarea id="feedbackMessage" name="message" rows="5" required placeholder="Please share your feedback in detail..."></textarea>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn-primary">Submit Feedback</button>
+                        <button type="reset" class="btn-secondary">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="section-container">
+            <h2 class="section-title">About Our Initiative</h2>
+            <div class="about-content">
+                <p>"What Sikkimese Want!" is a grassroots, community-led movement born from a simple belief: the people who live in Sikkim's villages and towns know best what they need. Our initiative brings together ordinary citizens, passionate volunteers, and local leaders to identify, document, and advocate for essential public amenities that can transform lives. From playgrounds where children can safely play to healthcare centers that save precious travel time for elderly villagers, we focus on the infrastructure that makes everyday life better for everyone, especially the most vulnerable members of our communities.</p>
+
+                <p>At the heart of our work are the children and families of rural Sikkim. Many villages lack basic facilities that urban areas take for granted - libraries where young minds can explore, community centers where families can gather, clean drinking water that prevents illness, and street lights that make roads safe after dark. These aren't luxuries; they're necessities that shape a child's future and a community's wellbeing. By giving voice to these needs and systematically presenting them to authorities, we're building a bridge between the people and the decision-makers who can bring about real change.</p>
+
+                <p>Our volunteers are the backbone of this initiative. They come from all walks of life - students, teachers, professionals, homemakers, and retirees - united by their love for Sikkim and their commitment to community service. Volunteers conduct ground surveys, gather community signatures, document infrastructure gaps with photos and reports, and follow up with government offices. They work without compensation, driven purely by the desire to see their neighborhoods flourish. If you believe in the power of collective action and want to contribute to Sikkim's development, we invite you to join our growing family of volunteers. Together, we can ensure that no community is left behind.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volunteer Section -->
+    <section id="volunteer" class="about-section" style="background: linear-gradient(135deg, var(--accent) 0%, var(--bg-light) 100%);">
+        <div class="section-container">
+            <h2 class="section-title">Join Our Volunteer Network</h2>
+            <div class="about-content">
+                <p>Volunteering with "What Sikkimese Want!" is more than just community service - it's an opportunity to directly shape the future of your district and create lasting impact in the lives of your neighbors. Our volunteers are the eyes, ears, and voice of communities across Sikkim. Whether you have a few hours a week or can commit to larger projects, there's a place for you in our team. You don't need special qualifications or experience - just a genuine desire to help, basic smartphone skills for documentation, and the ability to interact respectfully with community members and officials. We provide all the training, materials, and support you need to be effective.</p>
+            </div>
+        </div>
+    </section>
 
     <!-- Districts Section -->
     <section id="districts" class="districts-section">
@@ -528,50 +611,40 @@
     <!-- Footer -->
     <footer class="main-footer">
         <div class="footer-container">
-            <div class="footer-grid">
+            <div class="footer-grid footer-grid-4">
                 <div class="footer-col">
                     <h4>About</h4>
                     <ul>
-                        <li><a href="#">Our Story</a></li>
-                        <li><a href="#">Our Team</a></li>
-                        <li><a href="#">How It Works</a></li>
-                        <li><a href="#">Impact Stories</a></li>
+                        <li><a href="#about">Our Initiative</a></li>
+                        <li><a href="#guidelines">How It Works</a></li>
+                        <li><a href="#districts">Our Districts</a></li>
+                        <li><a href="#about">Volunteer Program</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Get Involved</h4>
+                    <h4>Services</h4>
                     <ul>
                         <li><a href="#request-form">Submit Request</a></li>
-                        <li><a href="#">Volunteer With Us</a></li>
-                        <li><a href="#">Partner Organizations</a></li>
-                        <li><a href="#">Donate</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Community</h4>
-                    <ul>
-                        <li><a href="#">Discussion Forum</a></li>
-                        <li><a href="#">Events</a></li>
-                        <li><a href="#">Newsletter</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="#track">Track Status</a></li>
+                        <li><a href="#guidelines">Guidelines</a></li>
+                        <li><a href="#faq">FAQs</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Connect</h4>
                     <ul>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">YouTube</a></li>
+                        <li><a href="https://instagram.com/whatsikkimesewant" target="_blank">Instagram</a></li>
+                        <li><a href="https://youtube.com/@whatsikkimesewant" target="_blank">YouTube</a></li>
+                        <li><a href="mailto:whatsikkimesewant@tutamail.com">Email Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Support</h4>
+                    <h4>Contact</h4>
                     <ul>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Feedback</a></li>
-                        <li><a href="#">Report Issue</a></li>
+                        <li><a href="mailto:whatsikkimesewant@tutamail.com">whatsikkimesewant@tutamail.com</a></li>
+                        <li><a href="#contact">Get In Touch</a></li>
+                        <li><a href="#about">Join as Volunteer</a></li>
+                        <li><a href="#feedback-form">Send Feedback</a></li>
                     </ul>
                 </div>
             </div>

@@ -997,6 +997,88 @@ body {
     color: var(--text-dark);
 }
 
+.contact-item a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contact-item a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Feedback Section */
+.feedback-section {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--bg-light) 100%);
+    padding: 60px 0;
+}
+
+.feedback-section .section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.feedback-form-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--bg-white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+}
+
+.feedback-form-container .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.feedback-form-container .form-group {
+    margin-bottom: 20px;
+}
+
+.feedback-form-container .button-group {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+}
+
+@media (max-width: 768px) {
+    .feedback-form-container {
+        padding: 24px;
+    }
+
+    .feedback-form-container .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+/* About Section */
+.about-section {
+    background: var(--bg-light);
+    padding: 60px 0;
+}
+
+.about-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-content p {
+    color: var(--text-body);
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+    text-align: justify;
+}
+
+.about-content p:last-child {
+    margin-bottom: 0;
+}
+
 /* Districts Section */
 .districts-section {
     background: var(--bg-white);
@@ -1083,6 +1165,10 @@ body {
     gap: 32px;
     padding-bottom: 40px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .footer-col h4 {
@@ -1802,17 +1888,19 @@ body {
 
 .district-modal .modal-content {
     max-width: 900px;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow: hidden;
     padding: 0;
     display: flex;
     flex-direction: column;
+    margin: 5vh auto;
 }
 
 .district-modal-header {
     position: relative;
-    height: 250px;
+    height: 200px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .district-modal-image {
@@ -1902,7 +1990,7 @@ body {
 }
 
 .district-requests-list {
-    max-height: 400px;
+    max-height: 250px;
     overflow-y: auto;
     display: grid;
     gap: 12px;
@@ -2009,7 +2097,7 @@ body {
 }
 
 .district-modal-footer {
-    padding: 20px 30px;
+    padding: 16px 30px;
     text-align: center;
     border-top: 1px solid var(--border-light);
     background: var(--bg-white);
@@ -2019,6 +2107,7 @@ body {
 .district-modal-footer .btn-primary {
     display: inline-block;
     text-decoration: none;
+    padding: 12px 24px;
 }
 
 /* Responsive for Process Timeline and District Modal */

@@ -67,17 +67,42 @@ async function initDB() {
             await pool.query('INSERT INTO admins (username, password) VALUES ($1, $2)', ['admin', 'admin123']);
         }
 
+        // Create feedback table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS feedback (
+                id SERIAL PRIMARY KEY,
+                reference_id VARCHAR(50) UNIQUE NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                phone VARCHAR(50),
+                district VARCHAR(100),
+                feedback_type VARCHAR(100) NOT NULL,
+                message TEXT NOT NULL,
+                status VARCHAR(50) DEFAULT 'New',
+                admin_notes TEXT,
+                submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP
+            )
+        `);
+
         console.log('Database initialized successfully');
     } catch (error) {
         console.error('Error initializing database:', error);
     }
 }
 
-// Helper function to generate reference ID
+// Helper function to generate reference ID for requests
 function generateReferenceId() {
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 1000);
     return `SKM${timestamp.toString().slice(-6)}${random.toString().padStart(3, '0')}`;
+}
+
+// Helper function to generate reference ID for feedback
+function generateFeedbackId() {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    return `FB${timestamp.toString().slice(-6)}${random.toString().padStart(3, '0')}`;
 }
 
 // API Routes
@@ -338,6 +363,118 @@ app.get('/api/districts/:district/requests', async (req, res) => {
     } catch (error) {
         console.error('Error fetching district requests:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch district requests' });
+    }
+});
+
+// ==========================================
+// FEEDBACK API ROUTES
+// ==========================================
+
+// Submit new feedback
+app.post('/api/feedback', async (req, res) => {
+    try {
+        const { name, email, phone, district, type, message } = req.body;
+
+        const referenceId = generateFeedbackId();
+
+        const result = await pool.query(
+            `INSERT INTO feedback (reference_id, name, email, phone, district, feedback_type, message)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
+             RETURNING id, reference_id`,
+            [referenceId, name, email, phone || null, district || null, type, message]
+        );
+
+        res.json({
+            success: true,
+            referenceId: result.rows[0].reference_id,
+            id: result.rows[0].id,
+            message: 'Feedback submitted successfully'
+        });
+    } catch (error) {
+        console.error('Error submitting feedback:', error);
+        res.status(500).json({ success: false, message: 'Failed to submit feedback' });
+    }
+});
+
+// Get all feedback (Admin)
+app.get('/api/feedback', async (req, res) => {
+    try {
+        const { status, type } = req.query;
+        let query = 'SELECT * FROM feedback WHERE 1=1';
+        const params = [];
+        let paramIndex = 1;
+
+        if (status) {
+            query += ` AND status = $${paramIndex}`;
+            params.push(status);
+            paramIndex++;
+        }
+        if (type) {
+            query += ` AND feedback_type = $${paramIndex}`;
+            params.push(type);
+            paramIndex++;
+        }
+
+        query += ' ORDER BY submitted_at DESC';
+
+        const result = await pool.query(query, params);
+        res.json({ success: true, feedback: result.rows });
+    } catch (error) {
+        console.error('Error fetching feedback:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch feedback' });
+    }
+});
+
+// Get single feedback by ID (Admin)
+app.get('/api/feedback/:id', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM feedback WHERE id = $1', [req.params.id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Feedback not found' });
+        }
+
+        res.json({ success: true, feedback: result.rows[0] });
+    } catch (error) {
+        console.error('Error fetching feedback:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch feedback' });
+    }
+});
+
+// Update feedback (Admin)
+app.put('/api/feedback/:id', async (req, res) => {
+    try {
+        const { status, adminNotes } = req.body;
+
+        const result = await pool.query(
+            `UPDATE feedback SET status = $1, admin_notes = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *`,
+            [status, adminNotes || null, req.params.id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Feedback not found' });
+        }
+
+        res.json({ success: true, message: 'Feedback updated successfully' });
+    } catch (error) {
+        console.error('Error updating feedback:', error);
+        res.status(500).json({ success: false, message: 'Failed to update feedback' });
+    }
+});
+
+// Delete feedback (Admin)
+app.delete('/api/feedback/:id', async (req, res) => {
+    try {
+        const result = await pool.query('DELETE FROM feedback WHERE id = $1 RETURNING *', [req.params.id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Feedback not found' });
+        }
+
+        res.json({ success: true, message: 'Feedback deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting feedback:', error);
+        res.status(500).json({ success: false, message: 'Failed to delete feedback' });
     }
 });
 
