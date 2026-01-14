@@ -809,6 +809,93 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ==========================================
+    // FEEDBACK FORM FUNCTIONALITY
+    // ==========================================
+
+    const feedbackForm = document.getElementById('feedbackForm');
+
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Collect feedback data
+            const feedbackData = {
+                name: document.getElementById('feedbackName').value,
+                email: document.getElementById('feedbackEmail').value,
+                type: document.getElementById('feedbackType').value,
+                message: document.getElementById('feedbackMessage').value
+            };
+
+            // Show loading state
+            const submitBtn = feedbackForm.querySelector('.btn-primary');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/feedback`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(feedbackData)
+                });
+
+                const result = await response.json();
+
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+
+                if (result.success) {
+                    // Show success modal
+                    showFeedbackSuccessModal(feedbackData, result.referenceId);
+                    // Reset form
+                    feedbackForm.reset();
+                } else {
+                    alert('Failed to submit feedback. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                alert('Error: Could not connect to server. Please try again later.');
+            }
+        });
+    }
+
+    // Show feedback success modal
+    function showFeedbackSuccessModal(data, referenceId) {
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        modalTitle.textContent = 'Thank You for Your Feedback!';
+        modalMessage.innerHTML = `
+            <div style="text-align: left; margin-top: 16px;">
+                <p style="margin-bottom: 16px; font-size: 15px; color: #2c5f2d;">
+                    We appreciate you taking the time to share your thoughts with us.
+                </p>
+                <div style="background: #f0f9ff; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                    <p style="margin: 0 0 8px 0; font-weight: 600; color: #0077a2;">Reference ID:</p>
+                    <p style="margin: 0; font-size: 18px; font-weight: 700; color: #005a7d; font-family: monospace;">
+                        ${referenceId}
+                    </p>
+                </div>
+                <div style="background: #f8f9fa; padding: 14px; border-radius: 6px; border-left: 3px solid #0077a2;">
+                    <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 600; color: #555;">Feedback Type:</p>
+                    <p style="margin: 0 0 12px 0; color: #333;">${data.type}</p>
+                    <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 600; color: #555;">Your Message:</p>
+                    <p style="margin: 0; color: #333; line-height: 1.5;">${data.message}</p>
+                </div>
+                <p style="margin-top: 16px; font-size: 14px; color: #666;">
+                    Your feedback has been recorded and will be reviewed by our team. Thank you for helping us improve!
+                </p>
+            </div>
+        `;
+
+        modal.style.display = 'block';
+    }
+
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
     console.log('Backend API:', API_BASE + '/api');

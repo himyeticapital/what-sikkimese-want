@@ -46,6 +46,7 @@ function showDashboard() {
     document.getElementById('dashboardScreen').style.display = 'block';
     loadStats();
     loadRequests();
+    loadFeedback();
 }
 
 // Load statistics
@@ -300,5 +301,181 @@ window.addEventListener('click', (event) => {
     const modal = document.getElementById('detailModal');
     if (event.target === modal) {
         modal.style.display = 'none';
+    }
+});
+
+// ==========================================
+// FEEDBACK MANAGEMENT
+// ==========================================
+
+let currentFeedbackId = null;
+
+// Load feedback
+async function loadFeedback(filters = {}) {
+    try {
+        const queryParams = new URLSearchParams(filters).toString();
+        const response = await fetch(`${API_URL}/feedback?${queryParams}`);
+        const data = await response.json();
+
+        if (data.success) {
+            displayFeedback(data.feedback);
+        }
+    } catch (error) {
+        console.error('Error loading feedback:', error);
+        document.getElementById('feedbackTableBody').innerHTML = `
+            <tr><td colspan="8" class="error">Error loading feedback</td></tr>
+        `;
+    }
+}
+
+// Display feedback
+function displayFeedback(feedbackList) {
+    const tbody = document.getElementById('feedbackTableBody');
+
+    if (feedbackList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="no-data">No feedback found</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = feedbackList.map(fb => {
+        const date = new Date(fb.submitted_at).toLocaleDateString('en-IN');
+        const statusClass = fb.status.toLowerCase().replace(' ', '-');
+        const messagePreview = fb.message.length > 50 ? fb.message.substring(0, 50) + '...' : fb.message;
+
+        return `
+            <tr onclick="viewFeedbackDetails(${fb.id})">
+                <td>${fb.reference_id}</td>
+                <td>${fb.name}</td>
+                <td>${fb.email}</td>
+                <td><span class="badge badge-type">${fb.feedback_type}</span></td>
+                <td>${messagePreview}</td>
+                <td><span class="badge badge-${statusClass}">${fb.status}</span></td>
+                <td>${date}</td>
+                <td><button class="btn-view" onclick="event.stopPropagation(); viewFeedbackDetails(${fb.id})">View</button></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// View feedback details
+async function viewFeedbackDetails(id) {
+    currentFeedbackId = id;
+    try {
+        const response = await fetch(`${API_URL}/feedback/${id}`);
+        const data = await response.json();
+
+        if (data.success) {
+            const fb = data.feedback;
+            const submittedDate = new Date(fb.submitted_at).toLocaleString('en-IN');
+            const updatedDate = fb.updated_at ? new Date(fb.updated_at).toLocaleString('en-IN') : 'Not updated';
+
+            document.getElementById('feedbackDetailContent').innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item"><strong>Reference ID:</strong> ${fb.reference_id}</div>
+                    <div class="detail-item"><strong>Name:</strong> ${fb.name}</div>
+                    <div class="detail-item"><strong>Email:</strong> ${fb.email}</div>
+                    <div class="detail-item"><strong>Phone:</strong> ${fb.phone || 'N/A'}</div>
+                    <div class="detail-item"><strong>District:</strong> ${fb.district || 'N/A'}</div>
+                    <div class="detail-item"><strong>Type:</strong> <span class="badge badge-type">${fb.feedback_type}</span></div>
+                    <div class="detail-item full-width"><strong>Message:</strong><br>${fb.message}</div>
+                    <div class="detail-item"><strong>Status:</strong> <span class="badge badge-${fb.status.toLowerCase()}">${fb.status}</span></div>
+                    <div class="detail-item"><strong>Submitted:</strong> ${submittedDate}</div>
+                    <div class="detail-item"><strong>Updated:</strong> ${updatedDate}</div>
+                    ${fb.admin_notes ? `<div class="detail-item full-width"><strong>Admin Notes:</strong><br>${fb.admin_notes}</div>` : ''}
+                </div>
+            `;
+
+            document.getElementById('updateFeedbackStatus').value = fb.status;
+            document.getElementById('feedbackAdminNotes').value = fb.admin_notes || '';
+            document.getElementById('feedbackDetailModal').style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error loading feedback details:', error);
+        alert('Failed to load feedback details');
+    }
+}
+
+// Save feedback changes
+document.getElementById('saveFeedbackChanges').addEventListener('click', async () => {
+    const status = document.getElementById('updateFeedbackStatus').value;
+    const adminNotes = document.getElementById('feedbackAdminNotes').value;
+
+    try {
+        const response = await fetch(`${API_URL}/feedback/${currentFeedbackId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status, adminNotes })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Feedback updated successfully');
+            document.getElementById('feedbackDetailModal').style.display = 'none';
+            loadFeedback();
+        } else {
+            alert('Failed to update feedback');
+        }
+    } catch (error) {
+        console.error('Error updating feedback:', error);
+        alert('Error updating feedback');
+    }
+});
+
+// Delete feedback
+document.getElementById('deleteFeedback').addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to delete this feedback? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/feedback/${currentFeedbackId}`, {
+            method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Feedback deleted successfully');
+            document.getElementById('feedbackDetailModal').style.display = 'none';
+            loadFeedback();
+        } else {
+            alert('Failed to delete feedback');
+        }
+    } catch (error) {
+        console.error('Error deleting feedback:', error);
+        alert('Error deleting feedback');
+    }
+});
+
+// Feedback filters
+document.getElementById('applyFeedbackFilters').addEventListener('click', () => {
+    const filters = {
+        status: document.getElementById('filterFeedbackStatus').value,
+        type: document.getElementById('filterFeedbackType').value
+    };
+
+    Object.keys(filters).forEach(key => {
+        if (!filters[key]) delete filters[key];
+    });
+
+    loadFeedback(filters);
+});
+
+document.getElementById('clearFeedbackFilters').addEventListener('click', () => {
+    document.getElementById('filterFeedbackStatus').value = '';
+    document.getElementById('filterFeedbackType').value = '';
+    loadFeedback();
+});
+
+// Close feedback modal
+document.querySelector('.close-feedback').addEventListener('click', () => {
+    document.getElementById('feedbackDetailModal').style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+    const feedbackModal = document.getElementById('feedbackDetailModal');
+    if (event.target === feedbackModal) {
+        feedbackModal.style.display = 'none';
     }
 });

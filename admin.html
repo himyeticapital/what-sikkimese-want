@@ -105,6 +105,49 @@
                 </table>
             </div>
         </div>
+
+        <div class="feedback-section">
+            <h2>User Feedback</h2>
+            <div class="feedback-filters">
+                <select id="filterFeedbackStatus" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="New">New</option>
+                    <option value="Reviewed">Reviewed</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <select id="filterFeedbackType" class="filter-select">
+                    <option value="">All Types</option>
+                    <option value="Suggestion">Suggestion</option>
+                    <option value="Bug Report">Bug Report</option>
+                    <option value="Complaint">Complaint</option>
+                    <option value="Appreciation">Appreciation</option>
+                    <option value="General">General Feedback</option>
+                </select>
+                <button id="applyFeedbackFilters" class="btn-apply">Apply Filters</button>
+                <button id="clearFeedbackFilters" class="btn-clear">Clear</button>
+            </div>
+            <div id="feedbackContainer" class="requests-table-container">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Ref ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Loading feedback...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div id="detailModal" class="modal">
@@ -124,6 +167,27 @@
                 <div class="button-group">
                     <button id="saveChanges" class="btn-save">Save Changes</button>
                     <button id="deleteRequest" class="btn-delete">Delete Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="feedbackDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close-feedback">&times;</span>
+            <h2>Feedback Details</h2>
+            <div id="feedbackDetailContent"></div>
+            <div class="modal-actions">
+                <h3>Update Status</h3>
+                <select id="updateFeedbackStatus" class="status-select">
+                    <option value="New">New</option>
+                    <option value="Reviewed">Reviewed</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <textarea id="feedbackAdminNotes" placeholder="Admin notes (optional)" rows="3"></textarea>
+                <div class="button-group">
+                    <button id="saveFeedbackChanges" class="btn-save">Save Changes</button>
+                    <button id="deleteFeedback" class="btn-delete">Delete Feedback</button>
                 </div>
             </div>
         </div>

@@ -507,3 +507,33 @@ body {
         flex-direction: column;
     }
 }
+
+/* Feedback Section */
+.feedback-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.feedback-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.feedback-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.badge-type {
+    background: #e7f3ff;
+    color: #0066cc;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
