@@ -28,10 +28,18 @@ function initializeEmailService() {
         transporter = nodemailer.createTransport({
             host: 'smtp.sendgrid.net',
             port: 587,
+            secure: false, // Use STARTTLS
             auth: {
                 user: 'apikey',
                 pass: process.env.SENDGRID_API_KEY
-            }
+            },
+            tls: {
+                rejectUnauthorized: true,
+                minVersion: 'TLSv1.2'
+            },
+            connectionTimeout: 10000, // 10 seconds
+            greetingTimeout: 10000, // 10 seconds
+            socketTimeout: 30000 // 30 seconds
         });
     } else {
         console.warn('⚠️  Email service not configured. Emails will not be sent.');
@@ -178,6 +186,8 @@ Questions? Contact us at: ${process.env.EMAIL_USER}
         return { success: true };
     } catch (error) {
         console.error('❌ Error sending confirmation email:', error.message);
+        console.error('   Error code:', error.code);
+        console.error('   Error details:', error.response || 'No response details');
         return { success: false, error: error.message };
     }
 }
@@ -367,6 +377,8 @@ Questions? Reply to this email or contact: ${process.env.EMAIL_USER}
         return { success: true };
     } catch (error) {
         console.error('❌ Error sending status update email:', error.message);
+        console.error('   Error code:', error.code);
+        console.error('   Error details:', error.response || 'No response details');
         return { success: false, error: error.message };
     }
 }
