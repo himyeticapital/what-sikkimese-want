@@ -290,8 +290,8 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="phone">Phone Number <span class="required">*</span></label>
-                                <input type="tel" id="phone" name="phone" required placeholder="Enter 10-digit phone number">
-                                <small style="color: #666; font-size: 0.85em;">Must be 10 digits (e.g., 9876543210)</small>
+                                <input type="tel" id="phone" name="phone" required pattern="[6-9][0-9]{9}" placeholder="Enter 10-digit phone number">
+                                <small style="color: #666; font-size: 0.85em;">Must be 10 digits starting with 6-9 (e.g., 9876543210)</small>
                             </div>
                             <div class="form-group">
                                 <label for="district">Select District <span class="required">*</span></label>

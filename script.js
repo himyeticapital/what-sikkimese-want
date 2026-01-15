@@ -400,10 +400,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Phone number validation
+    // Phone number validation - Indian numbers only
     const phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9+\-\s()]/g, '');
+        // Allow only digits
+        this.value = this.value.replace(/[^0-9]/g, '');
+
+        // Limit to 10 digits
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10);
+        }
+
+        // Validate Indian phone number pattern (must start with 6-9)
+        if (this.value.length > 0 && !['6', '7', '8', '9'].includes(this.value[0])) {
+            this.setCustomValidity('Indian phone numbers must start with 6, 7, 8, or 9');
+        } else if (this.value.length > 0 && this.value.length < 10) {
+            this.setCustomValidity('Phone number must be exactly 10 digits');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    // Email validation
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('blur', function(e) {
+        const email = this.value.trim();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email && !emailPattern.test(email)) {
+            this.setCustomValidity('Please enter a valid email address');
+        } else {
+            this.setCustomValidity('');
+        }
     });
 
     // Smooth scroll for better UX
