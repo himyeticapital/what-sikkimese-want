@@ -43,6 +43,30 @@ app.use(express.static(path.join(__dirname)));
 // Apply general rate limiting to all API routes
 app.use('/api/', generalApiLimiter);
 
+// Simple authentication middleware for admin routes
+const adminAuth = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    // Check for admin session (set by admin login)
+    if (req.headers['x-admin-session'] === 'true') {
+        return next();
+    }
+
+    // For now, we'll use a simple token check
+    // In production, use proper JWT tokens or session management
+    const adminToken = process.env.ADMIN_TOKEN || 'admin-secret-token';
+
+    if (authHeader && authHeader === `Bearer ${adminToken}`) {
+        return next();
+    }
+
+    // Unauthorized
+    return res.status(401).json({
+        success: false,
+        message: 'Unauthorized. Admin access required.'
+    });
+};
+
 // PostgreSQL connection
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -230,7 +254,7 @@ app.post('/api/requests',
 });
 
 // Get all requests (Admin)
-app.get('/api/requests', async (req, res) => {
+app.get('/api/requests', adminAuth, async (req, res) => {
     try {
         const { status, district, priority } = req.query;
         let query = 'SELECT * FROM requests WHERE 1=1';
@@ -263,8 +287,8 @@ app.get('/api/requests', async (req, res) => {
     }
 });
 
-// Get single request by ID
-app.get('/api/requests/:id', async (req, res) => {
+// Get single request by ID (Admin)
+app.get('/api/requests/:id', adminAuth, async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM requests WHERE id = $1', [req.params.id]);
 
@@ -314,7 +338,7 @@ app.get('/api/track/:referenceId', async (req, res) => {
 });
 
 // Update request (Admin)
-app.put('/api/requests/:id', async (req, res) => {
+app.put('/api/requests/:id', adminAuth, async (req, res) => {
     try {
         const { status, adminNotes } = req.body;
 
@@ -376,7 +400,7 @@ app.put('/api/requests/:id', async (req, res) => {
 });
 
 // Delete request (Admin)
-app.delete('/api/requests/:id', async (req, res) => {
+app.delete('/api/requests/:id', adminAuth, async (req, res) => {
     try {
         const result = await pool.query('DELETE FROM requests WHERE id = $1 RETURNING *', [req.params.id]);
 
@@ -543,7 +567,7 @@ app.post('/api/feedback',
 );
 
 // Get all feedback (Admin)
-app.get('/api/feedback', async (req, res) => {
+app.get('/api/feedback', adminAuth, async (req, res) => {
     try {
         const { status, type } = req.query;
         let query = 'SELECT * FROM feedback WHERE 1=1';
@@ -572,7 +596,7 @@ app.get('/api/feedback', async (req, res) => {
 });
 
 // Get single feedback by ID (Admin)
-app.get('/api/feedback/:id', async (req, res) => {
+app.get('/api/feedback/:id', adminAuth, async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM feedback WHERE id = $1', [req.params.id]);
 
@@ -588,7 +612,7 @@ app.get('/api/feedback/:id', async (req, res) => {
 });
 
 // Update feedback (Admin)
-app.put('/api/feedback/:id', async (req, res) => {
+app.put('/api/feedback/:id', adminAuth, async (req, res) => {
     try {
         const { status, adminNotes } = req.body;
 
@@ -609,7 +633,7 @@ app.put('/api/feedback/:id', async (req, res) => {
 });
 
 // Delete feedback (Admin)
-app.delete('/api/feedback/:id', async (req, res) => {
+app.delete('/api/feedback/:id', adminAuth, async (req, res) => {
     try {
         const result = await pool.query('DELETE FROM feedback WHERE id = $1 RETURNING *', [req.params.id]);
 
@@ -625,7 +649,7 @@ app.delete('/api/feedback/:id', async (req, res) => {
 });
 
 // Get statistics (Admin Dashboard)
-app.get('/api/stats', async (req, res) => {
+app.get('/api/stats', adminAuth, async (req, res) => {
     try {
         const totalResult = await pool.query('SELECT COUNT(*) FROM requests');
         const pendingResult = await pool.query("SELECT COUNT(*) FROM requests WHERE status = 'Pending'");

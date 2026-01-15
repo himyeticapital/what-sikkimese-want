@@ -1,6 +1,14 @@
 const API_URL = window.location.origin + '/api';
 let currentRequestId = null;
 
+// Helper function to get auth headers
+function getAuthHeaders() {
+    return {
+        'Content-Type': 'application/json',
+        'X-Admin-Session': 'true'
+    };
+}
+
 // Check if admin is logged in
 let isLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
 
@@ -52,7 +60,9 @@ function showDashboard() {
 // Load statistics
 async function loadStats() {
     try {
-        const response = await fetch(`${API_URL}/stats`);
+        const response = await fetch(`${API_URL}/stats`, {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -70,7 +80,9 @@ async function loadStats() {
 async function loadRequests(filters = {}) {
     try {
         const queryParams = new URLSearchParams(filters).toString();
-        const response = await fetch(`${API_URL}/requests?${queryParams}`);
+        const response = await fetch(`${API_URL}/requests?${queryParams}`, {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -222,7 +234,7 @@ document.getElementById('saveChanges').addEventListener('click', async () => {
     try {
         const response = await fetch(`${API_URL}/requests/${currentRequestId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ status, adminNotes })
         });
 
@@ -250,7 +262,8 @@ document.getElementById('deleteRequest').addEventListener('click', async () => {
 
     try {
         const response = await fetch(`${API_URL}/requests/${currentRequestId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         });
 
         const data = await response.json();
@@ -314,7 +327,9 @@ let currentFeedbackId = null;
 async function loadFeedback(filters = {}) {
     try {
         const queryParams = new URLSearchParams(filters).toString();
-        const response = await fetch(`${API_URL}/feedback?${queryParams}`);
+        const response = await fetch(`${API_URL}/feedback?${queryParams}`, {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -361,7 +376,9 @@ function displayFeedback(feedbackList) {
 async function viewFeedbackDetails(id) {
     currentFeedbackId = id;
     try {
-        const response = await fetch(`${API_URL}/feedback/${id}`);
+        const response = await fetch(`${API_URL}/feedback/${id}`, {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -403,7 +420,7 @@ document.getElementById('saveFeedbackChanges').addEventListener('click', async (
     try {
         const response = await fetch(`${API_URL}/feedback/${currentFeedbackId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ status, adminNotes })
         });
 
@@ -430,7 +447,8 @@ document.getElementById('deleteFeedback').addEventListener('click', async () => 
 
     try {
         const response = await fetch(`${API_URL}/feedback/${currentFeedbackId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         });
 
         const data = await response.json();
