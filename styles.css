@@ -2359,3 +2359,499 @@ body {
         font-size: 20px;
     }
 }
+
+/* ============================================
+   ENHANCED MOBILE RESPONSIVENESS
+   ============================================ */
+
+/* Standalone FAQ Section Styles */
+.faq-section-standalone {
+    background: #f8f9fa;
+    padding: 60px 0;
+    margin-top: 0;
+}
+
+.faq-section-standalone .section-title {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.faq-section-standalone .section-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 48px;
+}
+
+/* Mobile Optimizations - Large Phones & Tablets */
+@media (max-width: 992px) {
+    /* Header adjustments */
+    .top-bar {
+        display: none; /* Hide top bar on mobile for cleaner look */
+    }
+
+    .main-header {
+        padding: 16px 0;
+    }
+
+    .header-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .logo-section {
+        justify-content: center;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .search-box-container {
+        flex: 1;
+        max-width: 100%;
+    }
+
+    /* Navigation */
+    .main-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-menu {
+        min-width: max-content;
+        padding: 0 20px;
+    }
+
+    .nav-menu li a {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    /* Hero Banner */
+    .hero-content h2 {
+        font-size: 32px;
+        line-height: 1.3;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+    /* Quick Actions */
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    /* Track Status */
+    .track-section .section-container {
+        padding: 40px 20px;
+    }
+
+    /* Guidelines Timeline */
+    .process-timeline {
+        gap: 32px;
+    }
+
+    .process-step {
+        flex-direction: column;
+    }
+
+    .step-number {
+        margin-bottom: 16px;
+    }
+
+    /* Form Section */
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .content-main {
+        width: 100%;
+        padding: 0;
+    }
+
+    .content-sidebar {
+        width: 100%;
+        margin-top: 32px;
+    }
+
+    /* FAQ Grid */
+    .faq-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .faq-item {
+        padding: 20px;
+    }
+}
+
+/* Mobile Optimizations - Phones */
+@media (max-width: 768px) {
+    /* Typography scaling */
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    /* Logo section */
+    .logo-emblem .emblem-circle {
+        width: 48px;
+        height: 48px;
+        font-size: 16px;
+    }
+
+    .logo-text h1 {
+        font-size: 20px;
+    }
+
+    .logo-text p {
+        font-size: 12px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+        height: 400px;
+    }
+
+    .hero-content h2 {
+        font-size: 28px;
+        padding: 0 20px;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+        padding: 0 20px;
+    }
+
+    .hero-cta {
+        padding: 12px 28px;
+        font-size: 14px;
+    }
+
+    /* Quick Actions */
+    .quick-action-card {
+        padding: 24px 20px;
+    }
+
+    .quick-action-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+
+    .quick-action-card h3 {
+        font-size: 17px;
+    }
+
+    /* Section containers */
+    .section-container {
+        padding: 40px 20px;
+    }
+
+    /* Track Status */
+    .track-form {
+        padding: 24px;
+    }
+
+    .track-input {
+        font-size: 15px;
+        padding: 14px 16px;
+    }
+
+    .track-btn {
+        padding: 14px 24px;
+        font-size: 15px;
+    }
+
+    /* Guidelines */
+    .process-step {
+        padding: 20px;
+    }
+
+    .step-number {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .step-content h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .step-content p {
+        font-size: 14px;
+    }
+
+    .step-checklist li {
+        font-size: 13px;
+        padding-left: 24px;
+    }
+
+    /* Form Section */
+    .form-section {
+        padding: 32px 20px;
+    }
+
+    .section-header h2 {
+        font-size: 24px;
+    }
+
+    .section-header p {
+        font-size: 14px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+
+    .amenities-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .amenity-checkbox label {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+
+    .priority-options {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .priority-option label {
+        padding: 16px;
+        font-size: 14px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 15px;
+    }
+
+    /* Sidebar */
+    .sidebar-card {
+        padding: 24px 20px;
+    }
+
+    .sidebar-title {
+        font-size: 18px;
+    }
+
+    .contact-item {
+        font-size: 14px;
+    }
+
+    /* FAQ */
+    .faq-section-standalone {
+        padding: 40px 0;
+    }
+
+    .faq-item h4 {
+        font-size: 16px;
+    }
+
+    .faq-item p {
+        font-size: 14px;
+    }
+
+    /* Info cards */
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-card {
+        padding: 24px 20px;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+    }
+
+    .footer-section h3 {
+        font-size: 16px;
+    }
+
+    .footer-section p,
+    .footer-section li {
+        font-size: 13px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+
+/* Mobile Optimizations - Small Phones */
+@media (max-width: 480px) {
+    /* Extra compact styling for very small screens */
+
+    .logo-text h1 {
+        font-size: 18px;
+    }
+
+    .logo-text p {
+        font-size: 11px;
+    }
+
+    .hero-banner {
+        height: 350px;
+    }
+
+    .hero-content h2 {
+        font-size: 24px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+
+    .quick-action-card {
+        padding: 20px 16px;
+    }
+
+    .track-form {
+        padding: 20px 16px;
+    }
+
+    .form-section {
+        padding: 24px 16px;
+    }
+
+    .process-step {
+        padding: 16px;
+    }
+
+    .faq-item {
+        padding: 16px;
+    }
+
+    .info-card {
+        padding: 20px 16px;
+    }
+
+    /* Make buttons easier to tap */
+    .btn-primary,
+    .btn-secondary,
+    .track-btn,
+    .hero-cta {
+        min-height: 48px; /* Apple's recommended minimum tap target */
+    }
+
+    /* Ensure adequate spacing for touch targets */
+    .amenity-checkbox,
+    .priority-option {
+        margin-bottom: 8px;
+    }
+
+    /* Larger checkboxes for easier tapping */
+    .amenity-checkbox input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .priority-option input[type="radio"] {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Landscape mode optimizations for phones */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-banner {
+        height: 300px;
+    }
+
+    .hero-content h2 {
+        font-size: 24px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+}
+
+/* Fix for iOS Safari bottom bar */
+@supports (-webkit-touch-callout: none) {
+    .main-content {
+        min-height: calc(100vh - 100px);
+    }
+}
+
+/* Improve touch targets */
+@media (hover: none) and (pointer: coarse) {
+    /* For touch devices */
+    button,
+    .btn-primary,
+    .btn-secondary,
+    a.hero-cta,
+    .track-btn {
+        min-height: 44px; /* iOS recommended minimum */
+        min-width: 44px;
+    }
+
+    /* Increase spacing for dropdowns */
+    .dropdown-menu li a {
+        padding: 14px 20px;
+    }
+
+    /* Better checkbox/radio button tap targets */
+    .amenity-checkbox label,
+    .priority-option label {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Better focus states for keyboard/accessibility */
+@media (hover: hover) and (pointer: fine) {
+    /* Only show hover effects on devices with mouse */
+    button:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        transition: transform 0.2s ease;
+    }
+}
