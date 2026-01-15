@@ -311,10 +311,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Collect form data
+        const phoneValue = document.getElementById('phone').value;
         const formData = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
+            phone: phoneValue.replace(/\D/g, ''), // Strip all non-digit characters
             district: document.getElementById('district').value,
             gpu: document.getElementById('gpu').value,
             location: document.getElementById('location').value,
