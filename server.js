@@ -15,7 +15,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Trust proxy - required for Railway and other cloud platforms
-app.set('trust proxy', true);
+// Trust only the first proxy (Railway's load balancer)
+app.set('trust proxy', 1);
 
 // Rate limiting configuration
 const requestSubmissionLimiter = rateLimit({
