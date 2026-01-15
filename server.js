@@ -4,6 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 
 // Import notification services
 const { initializeEmailService, sendConfirmationEmail, sendStatusUpdateEmail } = require('./services/emailService');
@@ -12,10 +14,34 @@ const { initializeTelegramService, sendNewRequestNotification, sendStatusUpdateN
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Rate limiting configuration
+const requestSubmissionLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 3, // Limit each IP to 3 requests per windowMs
+    message: {
+        success: false,
+        message: 'Too many requests from this IP. Please try again after 15 minutes.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+const generalApiLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 30, // Limit each IP to 30 requests per minute
+    message: {
+        success: false,
+        message: 'Too many requests. Please slow down.'
+    }
+});
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
+
+// Apply general rate limiting to all API routes
+app.use('/api/', generalApiLimiter);
 
 // PostgreSQL connection
 const pool = new Pool({
@@ -112,31 +138,57 @@ function generateFeedbackId() {
 
 // API Routes
 
-// Submit new request
-app.post('/api/requests', async (req, res) => {
-    try {
-        const {
-            name,
-            email,
-            phone,
-            district,
-            gpu,
-            location,
-            amenities,
-            otherAmenity,
-            description,
-            population,
-            priority
-        } = req.body;
+// Submit new request with validation and rate limiting
+app.post('/api/requests',
+    requestSubmissionLimiter,
+    [
+        body('name').trim().notEmpty().withMessage('Name is required').isLength({ min: 2, max: 255 }).withMessage('Name must be between 2 and 255 characters'),
+        body('email').trim().notEmpty().withMessage('Email is required').isEmail().withMessage('Valid email is required').normalizeEmail(),
+        body('phone').trim().notEmpty().withMessage('Phone is required').matches(/^[0-9]{10}$/).withMessage('Phone must be 10 digits'),
+        body('district').trim().notEmpty().withMessage('District is required').isIn(['Gangtok', 'Mangan', 'Namchi', 'Gyalshing', 'Pakyong', 'Soreng']).withMessage('Invalid district'),
+        body('gpu').optional().trim().isLength({ max: 255 }).withMessage('GPU name too long'),
+        body('location').trim().notEmpty().withMessage('Location is required').isLength({ min: 3, max: 255 }).withMessage('Location must be between 3 and 255 characters'),
+        body('amenities').isArray({ min: 1 }).withMessage('At least one amenity must be selected'),
+        body('amenities.*').trim().notEmpty().withMessage('Amenity cannot be empty'),
+        body('otherAmenity').optional().trim().isLength({ max: 255 }).withMessage('Other amenity too long'),
+        body('description').trim().notEmpty().withMessage('Description is required').isLength({ min: 10, max: 2000 }).withMessage('Description must be between 10 and 2000 characters'),
+        body('population').optional().isInt({ min: 1, max: 1000000 }).withMessage('Population must be a valid number'),
+        body('priority').trim().notEmpty().withMessage('Priority is required').isIn(['Low', 'Medium', 'High']).withMessage('Invalid priority level')
+    ],
+    async (req, res) => {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: errors.array().map(err => ({ field: err.path, message: err.msg }))
+            });
+        }
 
-        const referenceId = generateReferenceId();
+        try {
+            const {
+                name,
+                email,
+                phone,
+                district,
+                gpu,
+                location,
+                amenities,
+                otherAmenity,
+                description,
+                population,
+                priority
+            } = req.body;
 
-        const result = await pool.query(
-            `INSERT INTO requests (reference_id, name, email, phone, district, gpu, location, amenities, other_amenity, description, population, priority)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-             RETURNING id, reference_id`,
-            [referenceId, name, email, phone, district, gpu || null, location, amenities, otherAmenity || null, description, population || null, priority]
-        );
+            const referenceId = generateReferenceId();
+
+            const result = await pool.query(
+                `INSERT INTO requests (reference_id, name, email, phone, district, gpu, location, amenities, other_amenity, description, population, priority)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+                 RETURNING id, reference_id`,
+                [referenceId, name, email, phone, district, gpu || null, location, amenities, otherAmenity || null, description, population || null, priority]
+            );
 
         // Send response immediately to user
         res.json({
@@ -443,31 +495,52 @@ app.get('/api/districts/:district/requests', async (req, res) => {
 // FEEDBACK API ROUTES
 // ==========================================
 
-// Submit new feedback
-app.post('/api/feedback', async (req, res) => {
-    try {
-        const { name, email, phone, district, type, message } = req.body;
+// Submit new feedback with validation and rate limiting
+app.post('/api/feedback',
+    requestSubmissionLimiter,
+    [
+        body('name').trim().notEmpty().withMessage('Name is required').isLength({ min: 2, max: 255 }).withMessage('Name must be between 2 and 255 characters'),
+        body('email').trim().notEmpty().withMessage('Email is required').isEmail().withMessage('Valid email is required').normalizeEmail(),
+        body('phone').optional().trim().matches(/^[0-9]{10}$/).withMessage('Phone must be 10 digits'),
+        body('district').optional().trim().isIn(['Gangtok', 'Mangan', 'Namchi', 'Gyalshing', 'Pakyong', 'Soreng', '']).withMessage('Invalid district'),
+        body('type').trim().notEmpty().withMessage('Feedback type is required').isIn(['Suggestion', 'Complaint', 'Appreciation', 'General']).withMessage('Invalid feedback type'),
+        body('message').trim().notEmpty().withMessage('Message is required').isLength({ min: 10, max: 2000 }).withMessage('Message must be between 10 and 2000 characters')
+    ],
+    async (req, res) => {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: errors.array().map(err => ({ field: err.path, message: err.msg }))
+            });
+        }
 
-        const referenceId = generateFeedbackId();
+        try {
+            const { name, email, phone, district, type, message } = req.body;
 
-        const result = await pool.query(
-            `INSERT INTO feedback (reference_id, name, email, phone, district, feedback_type, message)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
-             RETURNING id, reference_id`,
-            [referenceId, name, email, phone || null, district || null, type, message]
-        );
+            const referenceId = generateFeedbackId();
 
-        res.json({
-            success: true,
-            referenceId: result.rows[0].reference_id,
-            id: result.rows[0].id,
-            message: 'Feedback submitted successfully'
-        });
-    } catch (error) {
-        console.error('Error submitting feedback:', error);
-        res.status(500).json({ success: false, message: 'Failed to submit feedback' });
+            const result = await pool.query(
+                `INSERT INTO feedback (reference_id, name, email, phone, district, feedback_type, message)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7)
+                 RETURNING id, reference_id`,
+                [referenceId, name, email, phone || null, district || null, type, message]
+            );
+
+            res.json({
+                success: true,
+                referenceId: result.rows[0].reference_id,
+                id: result.rows[0].id,
+                message: 'Feedback submitted successfully'
+            });
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            res.status(500).json({ success: false, message: 'Failed to submit feedback' });
+        }
     }
-});
+);
 
 // Get all feedback (Admin)
 app.get('/api/feedback', async (req, res) => {
