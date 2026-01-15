@@ -19,10 +19,11 @@ const PORT = process.env.PORT || 3000;
 app.set('trust proxy', 1);
 
 // Rate limiting configuration
-// TEMPORARY: Increased limit for testing SendGrid email functionality
+// Request submission: Allow 20 requests per 15 minutes per IP
+// This prevents spam while allowing legitimate users to submit multiple requests
 const requestSubmissionLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Temporarily increased to 100 for testing (was 3)
+    max: 20, // 20 requests per 15 minutes - reasonable for production
     message: {
         success: false,
         message: 'Too many requests from this IP. Please try again after 15 minutes.'
@@ -31,9 +32,22 @@ const requestSubmissionLimiter = rateLimit({
     legacyHeaders: false,
 });
 
+// Feedback submission: Allow 15 requests per 15 minutes per IP
+const feedbackSubmissionLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 15, // 15 feedback submissions per 15 minutes
+    message: {
+        success: false,
+        message: 'Too many feedback submissions. Please try again after 15 minutes.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// General API: Allow 100 requests per minute for browsing/viewing
 const generalApiLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 30, // Limit each IP to 30 requests per minute
+    max: 100, // Increased from 30 to allow smooth browsing experience
     message: {
         success: false,
         message: 'Too many requests. Please slow down.'
@@ -548,7 +562,7 @@ app.get('/api/districts/:district/requests', async (req, res) => {
 
 // Submit new feedback with validation and rate limiting
 app.post('/api/feedback',
-    requestSubmissionLimiter,
+    feedbackSubmissionLimiter,
     [
         body('name').trim().notEmpty().withMessage('Name is required').isLength({ min: 2, max: 255 }).withMessage('Name must be between 2 and 255 characters'),
         body('email').trim().notEmpty().withMessage('Email is required').isEmail().withMessage('Valid email is required').normalizeEmail(),
