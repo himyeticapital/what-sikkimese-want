@@ -1,8 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const path = require('path');
+
+// Import notification services
+const { initializeEmailService, sendConfirmationEmail, sendStatusUpdateEmail } = require('./services/emailService');
+const { initializeTelegramService, sendNewRequestNotification, sendStatusUpdateNotification } = require('./services/telegramService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -133,12 +138,39 @@ app.post('/api/requests', async (req, res) => {
             [referenceId, name, email, phone, district, gpu || null, location, amenities, otherAmenity || null, description, population || null, priority]
         );
 
+        // Send response immediately to user
         res.json({
             success: true,
             referenceId: result.rows[0].reference_id,
             id: result.rows[0].id,
             message: 'Request submitted successfully'
         });
+
+        // Send notifications asynchronously (don't block response)
+        const requestData = {
+            name,
+            email,
+            phone,
+            district,
+            gpu,
+            location,
+            amenities,
+            description,
+            population,
+            priority,
+            referenceId
+        };
+
+        // Send email confirmation
+        sendConfirmationEmail(requestData).catch(err => {
+            console.error('Failed to send confirmation email:', err);
+        });
+
+        // Send Telegram notification to district group
+        sendNewRequestNotification(requestData).catch(err => {
+            console.error('Failed to send Telegram notification:', err);
+        });
+
     } catch (error) {
         console.error('Error submitting request:', error);
         res.status(500).json({ success: false, message: 'Failed to submit request' });
@@ -234,6 +266,16 @@ app.put('/api/requests/:id', async (req, res) => {
     try {
         const { status, adminNotes } = req.body;
 
+        // Get the request details before updating (for email notification)
+        const oldRequest = await pool.query('SELECT * FROM requests WHERE id = $1', [req.params.id]);
+
+        if (oldRequest.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'Request not found' });
+        }
+
+        const oldData = oldRequest.rows[0];
+        const oldStatus = oldData.status;
+
         const result = await pool.query(
             `UPDATE requests SET status = $1, admin_notes = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *`,
             [status, adminNotes || null, req.params.id]
@@ -243,7 +285,38 @@ app.put('/api/requests/:id', async (req, res) => {
             return res.status(404).json({ success: false, message: 'Request not found' });
         }
 
+        // Send response immediately
         res.json({ success: true, message: 'Request updated successfully' });
+
+        // Send notifications asynchronously if status changed
+        if (status !== oldStatus) {
+            const updateData = {
+                email: result.rows[0].email,
+                name: result.rows[0].name,
+                referenceId: result.rows[0].reference_id,
+                oldStatus: oldStatus,
+                newStatus: status,
+                adminNotes: adminNotes,
+                district: result.rows[0].district,
+                location: result.rows[0].location,
+                amenities: result.rows[0].amenities
+            };
+
+            // Send email notification
+            sendStatusUpdateEmail(updateData).catch(err => {
+                console.error('Failed to send status update email:', err);
+            });
+
+            // Optionally send Telegram notification (comment out if you don't want group updates)
+            // sendStatusUpdateNotification({
+            //     district: result.rows[0].district,
+            //     referenceId: result.rows[0].reference_id,
+            //     oldStatus: oldStatus,
+            //     newStatus: status,
+            //     adminNotes: adminNotes,
+            //     location: result.rows[0].location
+            // }).catch(err => console.error('Failed to send Telegram update:', err));
+        }
     } catch (error) {
         console.error('Error updating request:', error);
         res.status(500).json({ success: false, message: 'Failed to update request' });
@@ -522,6 +595,12 @@ app.listen(PORT, '0.0.0.0', () => {
 
     // Initialize database after server starts
     initDB().catch(err => console.error('DB init error:', err));
+
+    // Initialize notification services
+    console.log('\n📧 Initializing notification services...');
+    initializeEmailService();
+    initializeTelegramService();
+    console.log('✅ Notification services ready\n');
 });
 
 // Graceful shutdown
