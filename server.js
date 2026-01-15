@@ -19,9 +19,10 @@ const PORT = process.env.PORT || 3000;
 app.set('trust proxy', 1);
 
 // Rate limiting configuration
+// TEMPORARY: Increased limit for testing SendGrid email functionality
 const requestSubmissionLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 3, // Limit each IP to 3 requests per windowMs
+    max: 100, // Temporarily increased to 100 for testing (was 3)
     message: {
         success: false,
         message: 'Too many requests from this IP. Please try again after 15 minutes.'
