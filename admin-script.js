@@ -127,10 +127,12 @@ function displayRequests(requests) {
     }).join('');
 }
 
-// View request details
-async function viewRequest(id) {
+// View request details (global function for onclick)
+window.viewRequest = async function(id) {
     try {
-        const response = await fetch(`${API_URL}/requests/${id}`);
+        const response = await fetch(`${API_URL}/requests/${id}`, {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.success) {
@@ -372,8 +374,8 @@ function displayFeedback(feedbackList) {
     }).join('');
 }
 
-// View feedback details
-async function viewFeedbackDetails(id) {
+// View feedback details (global function for onclick)
+window.viewFeedbackDetails = async function(id) {
     currentFeedbackId = id;
     try {
         const response = await fetch(`${API_URL}/feedback/${id}`, {
