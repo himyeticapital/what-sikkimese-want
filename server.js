@@ -14,6 +14,9 @@ const { initializeTelegramService, sendNewRequestNotification, sendStatusUpdateN
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy - required for Railway and other cloud platforms
+app.set('trust proxy', true);
+
 // Rate limiting configuration
 const requestSubmissionLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
