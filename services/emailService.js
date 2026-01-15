@@ -4,15 +4,17 @@
  */
 
 const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
 // Email configuration
 let transporter = null;
+let emailService = null;
 
 /**
  * Initialize email transporter based on configuration
  */
 function initializeEmailService() {
-    const emailService = process.env.EMAIL_SERVICE;
+    emailService = process.env.EMAIL_SERVICE;
 
     if (emailService === 'gmail') {
         // Gmail SMTP configuration
@@ -24,23 +26,10 @@ function initializeEmailService() {
             }
         });
     } else if (emailService === 'sendgrid') {
-        // SendGrid SMTP configuration
-        transporter = nodemailer.createTransport({
-            host: 'smtp.sendgrid.net',
-            port: 587,
-            secure: false, // Use STARTTLS
-            auth: {
-                user: 'apikey',
-                pass: process.env.SENDGRID_API_KEY
-            },
-            tls: {
-                rejectUnauthorized: true,
-                minVersion: 'TLSv1.2'
-            },
-            connectionTimeout: 10000, // 10 seconds
-            greetingTimeout: 10000, // 10 seconds
-            socketTimeout: 30000 // 30 seconds
-        });
+        // SendGrid Web API configuration (more reliable than SMTP from cloud platforms)
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        console.log('✅ Email service initialized: sendgrid (Web API)');
+        return true;
     } else {
         console.warn('⚠️  Email service not configured. Emails will not be sent.');
         console.warn('   Set EMAIL_SERVICE in .env file to "gmail" or "sendgrid"');
@@ -55,7 +44,9 @@ function initializeEmailService() {
  * Send confirmation email when user submits a request
  */
 async function sendConfirmationEmail(requestData) {
-    if (!transporter) {
+    const currentEmailService = process.env.EMAIL_SERVICE;
+
+    if (!currentEmailService || (currentEmailService === 'gmail' && !transporter)) {
         console.log('📧 Email not sent: Service not configured');
         return { success: false, reason: 'not_configured' };
     }
@@ -66,7 +57,10 @@ async function sendConfirmationEmail(requestData) {
     const trackingUrl = `${process.env.DOMAIN}/#track`;
 
     const mailOptions = {
-        from: `"What Sikkimese Want" <${process.env.EMAIL_USER}>`,
+        from: {
+            email: process.env.EMAIL_USER,
+            name: 'What Sikkimese Want'
+        },
         to: email,
         subject: `Request Received - Ref: ${referenceId}`,
         text: `
@@ -181,13 +175,21 @@ Questions? Contact us at: ${process.env.EMAIL_USER}
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        if (currentEmailService === 'sendgrid') {
+            // Use SendGrid Web API
+            await sgMail.send(mailOptions);
+        } else {
+            // Use nodemailer (for Gmail)
+            await transporter.sendMail(mailOptions);
+        }
         console.log(`✅ Confirmation email sent to ${email} (Ref: ${referenceId})`);
         return { success: true };
     } catch (error) {
         console.error('❌ Error sending confirmation email:', error.message);
+        if (error.response) {
+            console.error('   Error response:', JSON.stringify(error.response.body));
+        }
         console.error('   Error code:', error.code);
-        console.error('   Error details:', error.response || 'No response details');
         return { success: false, error: error.message };
     }
 }
@@ -196,7 +198,9 @@ Questions? Contact us at: ${process.env.EMAIL_USER}
  * Send status update email when admin changes request status
  */
 async function sendStatusUpdateEmail(updateData) {
-    if (!transporter) {
+    const currentEmailService = process.env.EMAIL_SERVICE;
+
+    if (!currentEmailService || (currentEmailService === 'gmail' && !transporter)) {
         console.log('📧 Email not sent: Service not configured');
         return { success: false, reason: 'not_configured' };
     }
@@ -230,7 +234,10 @@ async function sendStatusUpdateEmail(updateData) {
     const oldStatusColor = statusColors[oldStatus] || { bg: '#f5f5f5', color: '#999' };
 
     const mailOptions = {
-        from: `"What Sikkimese Want" <${process.env.EMAIL_USER}>`,
+        from: {
+            email: process.env.EMAIL_USER,
+            name: 'What Sikkimese Want'
+        },
         to: email,
         subject: `[Status Update] Your Request - Ref: ${referenceId}`,
         text: `
@@ -372,13 +379,21 @@ Questions? Reply to this email or contact: ${process.env.EMAIL_USER}
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        if (currentEmailService === 'sendgrid') {
+            // Use SendGrid Web API
+            await sgMail.send(mailOptions);
+        } else {
+            // Use nodemailer (for Gmail)
+            await transporter.sendMail(mailOptions);
+        }
         console.log(`✅ Status update email sent to ${email} (Ref: ${referenceId}, Status: ${newStatus})`);
         return { success: true };
     } catch (error) {
         console.error('❌ Error sending status update email:', error.message);
+        if (error.response) {
+            console.error('   Error response:', JSON.stringify(error.response.body));
+        }
         console.error('   Error code:', error.code);
-        console.error('   Error details:', error.response || 'No response details');
         return { success: false, error: error.message };
     }
 }
