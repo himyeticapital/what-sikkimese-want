@@ -3,14 +3,15 @@ let currentRequestId = null;
 
 // Helper function to get auth headers
 function getAuthHeaders() {
+    const token = sessionStorage.getItem('adminToken');
     return {
         'Content-Type': 'application/json',
-        'X-Admin-Session': 'true'
+        'X-Admin-Token': token
     };
 }
 
 // Check if admin is logged in
-let isLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+let isLoggedIn = sessionStorage.getItem('adminToken') !== null;
 
 if (isLoggedIn) {
     showDashboard();
@@ -31,8 +32,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         const data = await response.json();
 
-        if (data.success) {
-            sessionStorage.setItem('adminLoggedIn', 'true');
+        if (data.success && data.token) {
+            // Store the secure session token
+            sessionStorage.setItem('adminToken', data.token);
             showDashboard();
         } else {
             alert('Invalid credentials. Please try again.');
@@ -44,8 +46,19 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 });
 
 // Logout handler
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    sessionStorage.removeItem('adminLoggedIn');
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try {
+        // Call logout endpoint to invalidate session
+        await fetch(`${API_URL}/admin/logout`, {
+            method: 'POST',
+            headers: getAuthHeaders()
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+
+    // Clear token and reload
+    sessionStorage.removeItem('adminToken');
     location.reload();
 });
 

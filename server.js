@@ -48,20 +48,20 @@ app.use(express.static(path.join(__dirname)));
 // Apply general rate limiting to all API routes
 app.use('/api/', generalApiLimiter);
 
+// In-memory session store (simple but effective for single admin)
+const adminSessions = new Set();
+
+// Generate secure random session token
+function generateSessionToken() {
+    return require('crypto').randomBytes(32).toString('hex');
+}
+
 // Simple authentication middleware for admin routes
 const adminAuth = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    const sessionToken = req.headers['x-admin-token'];
 
-    // Check for admin session (set by admin login)
-    if (req.headers['x-admin-session'] === 'true') {
-        return next();
-    }
-
-    // For now, we'll use a simple token check
-    // In production, use proper JWT tokens or session management
-    const adminToken = process.env.ADMIN_TOKEN || 'admin-secret-token';
-
-    if (authHeader && authHeader === `Bearer ${adminToken}`) {
+    // Check if session token exists and is valid
+    if (sessionToken && adminSessions.has(sessionToken)) {
         return next();
     }
 
@@ -427,13 +427,35 @@ app.post('/api/admin/login', async (req, res) => {
         const result = await pool.query('SELECT * FROM admins WHERE username = $1 AND password = $2', [username, password]);
 
         if (result.rows.length > 0) {
-            res.json({ success: true, message: 'Login successful' });
+            // Generate secure session token
+            const sessionToken = generateSessionToken();
+            adminSessions.add(sessionToken);
+
+            console.log(`✅ Admin logged in: ${username}`);
+            res.json({
+                success: true,
+                message: 'Login successful',
+                token: sessionToken
+            });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ success: false, message: 'Login failed' });
+    }
+});
+
+// Admin logout
+app.post('/api/admin/logout', adminAuth, async (req, res) => {
+    try {
+        const sessionToken = req.headers['x-admin-token'];
+        adminSessions.delete(sessionToken);
+        console.log('✅ Admin logged out');
+        res.json({ success: true, message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Error during logout:', error);
+        res.status(500).json({ success: false, message: 'Logout failed' });
     }
 });
 
