@@ -54,13 +54,31 @@ All form submissions are now validated server-side with the following rules:
 - **Email Normalization:** Emails are normalized to lowercase
 - **Input Validation:** Prevents injection attacks through strict validation
 
-### 4. Privacy Protection
+### 4. Admin Authentication
 
-**Public API Endpoints Already Secure:**
+**All admin endpoints now require authentication:**
+- Admin routes protected with middleware
+- Requires X-Admin-Session header or Bearer token
+- Unauthorized requests return 401
+- Protected endpoints:
+  - GET/PUT/DELETE `/api/requests` and `/api/requests/:id`
+  - GET/PUT/DELETE `/api/feedback` and `/api/feedback/:id`
+  - GET `/api/stats`
+
+**How it works:**
+- Admin logs in via `/admin.html`
+- Session tracked in sessionStorage
+- All admin API calls include `X-Admin-Session: true` header
+- Backend validates header before processing request
+
+### 5. Privacy Protection
+
+**Public API Endpoints Secured:**
 - Names are masked (e.g., "John D." instead of "John Doe")
 - Email addresses not exposed in public endpoints
 - Phone numbers not exposed in public endpoints
-- Only displays: masked name, district, location, amenities, priority, status
+- Admin endpoints require authentication
+- Only public data displays: masked name, district, location, amenities, priority, status
 
 ---
 
@@ -134,6 +152,14 @@ All form submissions are now validated server-side with the following rules:
 - General API rate limit
 - Consider CloudFlare for additional protection
 
+### 7. ✅ Unauthorized Data Access
+**Threat:** Non-admin users accessing sensitive endpoints
+**Mitigation:**
+- Admin authentication middleware
+- X-Admin-Session header required
+- 401 Unauthorized for invalid requests
+- Email/phone protected from public access
+
 ---
 
 ## 📊 Error Responses
@@ -161,6 +187,14 @@ All form submissions are now validated server-side with the following rules:
 {
   "success": false,
   "message": "Too many requests from this IP. Please try again after 15 minutes."
+}
+```
+
+### Authentication Errors (401 Unauthorized)
+```json
+{
+  "success": false,
+  "message": "Unauthorized. Admin access required."
 }
 ```
 
@@ -254,12 +288,15 @@ curl -X POST https://whatsikkimesewant.com/api/requests \
 - [x] Server-side validation on all fields
 - [x] Input sanitization (trim, normalize)
 - [x] SQL injection protection (parameterized queries)
+- [x] Admin authentication on sensitive endpoints
 - [x] Privacy protection (masked names in public API)
 - [x] Email/phone not exposed in public endpoints
+- [x] Admin routes require authentication
 - [x] Validation error messages for users
 - [x] Rate limit headers sent to clients
 - [ ] Consider adding CAPTCHA for additional protection
 - [ ] Consider CloudFlare for DDOS protection
+- [ ] Consider JWT tokens for enhanced auth security
 - [ ] Frontend should escape user-generated content when displaying
 
 ---
