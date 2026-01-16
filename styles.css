@@ -3025,3 +3025,395 @@ html {
         transition: transform 0.2s ease;
     }
 }
+
+/* ==========================================
+   TELEGRAM COMMUNITY HUB
+   ========================================== */
+
+/* Floating Telegram Button */
+.telegram-floating-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #0088cc 0%, #006bb3 100%);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0, 136, 204, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 999;
+    color: white;
+}
+
+.telegram-floating-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 6px 24px rgba(0, 136, 204, 0.6);
+}
+
+.telegram-floating-btn svg {
+    fill: white;
+    stroke: none;
+}
+
+/* Notification Badge */
+.telegram-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ff4444;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    animation: pulse 2s infinite;
+}
+
+/* Pulse animation for badge */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Telegram Modal Base */
+.telegram-modal .modal-content {
+    max-width: 900px;
+    max-height: 90vh;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Modal Header */
+.telegram-modal-header {
+    text-align: center;
+    padding: 40px 32px 32px;
+    background: linear-gradient(135deg, #0088cc 0%, #006bb3 100%);
+    color: white;
+}
+
+.telegram-modal-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    fill: white;
+}
+
+.telegram-modal-header h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.telegram-modal-header p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* District Tabs */
+.telegram-district-tabs {
+    display: flex;
+    background: var(--bg-light);
+    padding: 8px;
+    gap: 8px;
+    overflow-x: auto;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.district-tab {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 20px;
+    background: white;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-body);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.district-tab:hover {
+    border-color: #0088cc;
+    background: rgba(0, 136, 204, 0.05);
+}
+
+.district-tab.active {
+    background: #0088cc;
+    color: white;
+    border-color: #0088cc;
+}
+
+/* Modal Body */
+.telegram-modal-body {
+    padding: 32px;
+    overflow-y: auto;
+    max-height: calc(90vh - 300px);
+}
+
+/* District Info */
+.telegram-district-info {
+    margin-bottom: 24px;
+}
+
+.telegram-district-info h3 {
+    color: var(--primary-dark);
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.telegram-district-info p {
+    color: var(--text-body);
+    line-height: 1.6;
+}
+
+/* Stats Grid */
+.telegram-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: var(--bg-light);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid var(--border-light);
+    transition: all 0.2s;
+}
+
+.stat-card:hover {
+    border-color: #0088cc;
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Join Button */
+.telegram-join-section {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(0, 136, 204, 0.1) 0%, rgba(0, 107, 179, 0.1) 100%);
+    border-radius: 12px;
+    margin-bottom: 32px;
+}
+
+.btn-telegram-join {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #0088cc;
+    color: white;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+}
+
+.btn-telegram-join:hover {
+    background: #006bb3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 136, 204, 0.4);
+    color: white;
+}
+
+.telegram-join-note {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Live Indicator */
+.live-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #ff4444;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+/* Activity Feed */
+.telegram-activity-section h4 {
+    color: var(--primary-dark);
+    font-size: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.telegram-activity-feed {
+    display: grid;
+    gap: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 24px;
+}
+
+.activity-item {
+    background: var(--bg-light);
+    border-left: 4px solid #0088cc;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.2s;
+}
+
+.activity-item:hover {
+    background: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.activity-location {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.activity-time {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.activity-amenities {
+    font-size: 14px;
+    color: var(--text-body);
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+}
+
+/* Info Box */
+.telegram-info-box {
+    background: var(--accent);
+    border-radius: 12px;
+    padding: 24px;
+    border-left: 4px solid #0088cc;
+}
+
+.telegram-info-box h5 {
+    color: var(--primary-dark);
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.telegram-info-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.telegram-info-box li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    color: var(--text-body);
+    font-size: 14px;
+}
+
+.telegram-info-box li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #0088cc;
+    font-weight: 700;
+}
+
+/* Modal Footer */
+.telegram-modal-footer {
+    text-align: center;
+    padding: 20px;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-light);
+}
+
+.telegram-modal-footer p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.telegram-modal-footer a {
+    color: #0088cc;
+    font-weight: 600;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .telegram-floating-btn {
+        bottom: 16px;
+        right: 16px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .telegram-district-tabs {
+        flex-direction: column;
+    }
+
+    .district-tab {
+        min-width: 100%;
+    }
+
+    .telegram-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .telegram-modal-body {
+        padding: 20px;
+    }
+
+    .btn-telegram-join {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .telegram-modal-header {
+        padding: 32px 20px 24px;
+    }
+
+    .telegram-modal-header h2 {
+        font-size: 24px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+    }
+}

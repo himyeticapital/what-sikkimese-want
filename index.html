@@ -595,6 +595,106 @@
         </div>
     </div>
 
+    <!-- Floating Telegram Button -->
+    <button id="telegramFloatingBtn" class="telegram-floating-btn" aria-label="Join Telegram Community">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+        </svg>
+        <span class="telegram-badge">Join</span>
+    </button>
+
+    <!-- Telegram Community Modal -->
+    <div id="telegramModal" class="modal telegram-modal">
+        <div class="modal-content modal-large">
+            <span class="close telegram-close">&times;</span>
+
+            <!-- Modal Header -->
+            <div class="telegram-modal-header">
+                <svg class="telegram-modal-icon" width="64" height="64" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                </svg>
+                <h2>Join Community Volunteer Network</h2>
+                <p>Connect with volunteers in your district via Telegram</p>
+            </div>
+
+            <!-- District Selector Tabs -->
+            <div class="telegram-district-tabs">
+                <button class="district-tab active" data-district="gangtok">Gangtok</button>
+                <button class="district-tab" data-district="mangan">Mangan</button>
+                <button class="district-tab" data-district="namchi">Namchi</button>
+                <button class="district-tab" data-district="gyalshing">Gyalshing</button>
+                <button class="district-tab" data-district="pakyong">Pakyong</button>
+                <button class="district-tab" data-district="soreng">Soreng</button>
+            </div>
+
+            <!-- Modal Body - District Content -->
+            <div class="telegram-modal-body">
+                <!-- District Info Section -->
+                <div class="telegram-district-info">
+                    <h3 id="telegramDistrictName">Gangtok District</h3>
+                    <p id="telegramDistrictDesc">Join our active volunteer network in Gangtok, the capital district. Help review requests, conduct surveys, and coordinate community development initiatives.</p>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="telegram-stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-icon">📊</span>
+                        <span class="stat-value" id="telegramTotalRequests">0</span>
+                        <span class="stat-label">Total Requests</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">⏳</span>
+                        <span class="stat-value" id="telegramPendingRequests">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">✅</span>
+                        <span class="stat-value" id="telegramActiveVolunteers">15+</span>
+                        <span class="stat-label">Active Volunteers</span>
+                    </div>
+                </div>
+
+                <!-- Join Button - Primary CTA -->
+                <div class="telegram-join-section">
+                    <a id="telegramJoinBtn" href="#" target="_blank" class="btn-telegram-join">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                        </svg>
+                        Join Telegram Group
+                    </a>
+                    <p class="telegram-join-note">Get real-time updates and coordinate with volunteers</p>
+                </div>
+
+                <!-- Recent Activity Feed -->
+                <div class="telegram-activity-section">
+                    <h4>
+                        <span class="live-indicator"></span>
+                        Recent Community Activity
+                    </h4>
+                    <div id="telegramActivityFeed" class="telegram-activity-feed">
+                        <div class="loading-spinner">Loading activity...</div>
+                    </div>
+                </div>
+
+                <!-- What Volunteers Do Info Box -->
+                <div class="telegram-info-box">
+                    <h5>What Our Volunteers Do</h5>
+                    <ul>
+                        <li>Review and verify community requests</li>
+                        <li>Conduct on-site surveys and documentation</li>
+                        <li>Coordinate with local authorities</li>
+                        <li>Support fellow community members</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="telegram-modal-footer">
+                <p>Questions? <a href="mailto:whatsikkimesewant@tutamail.com">Contact us</a></p>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

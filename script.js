@@ -988,6 +988,161 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ==========================================
+    // TELEGRAM COMMUNITY MODAL
+    // ==========================================
+
+    // Telegram volunteer join links for each district
+    const telegramJoinLinks = {
+        gangtok: 'https://t.me/+AhxBpQwOKZg1NzY1',
+        mangan: 'https://t.me/+4EkLUBodhvJlMGRl',
+        namchi: 'https://t.me/+rO6OwZpAWbBmOGY1',
+        gyalshing: 'https://t.me/+eelQO-LqAa0xMWI1',
+        pakyong: 'https://t.me/+rO6OwZpAWbBmOGY1',
+        soreng: 'https://t.me/+4p-o-rKJQS05NGI9'
+    };
+
+    // District descriptions for Telegram modal
+    const telegramDistrictInfo = {
+        gangtok: {
+            name: 'Gangtok District',
+            description: 'Join our active volunteer network in Gangtok, the capital district. Help review requests, conduct surveys, and coordinate community development initiatives.'
+        },
+        mangan: {
+            name: 'Mangan District (North Sikkim)',
+            description: 'Support remote communities in North Sikkim. Volunteers help bridge the infrastructure gap in high-altitude areas with limited connectivity.'
+        },
+        namchi: {
+            name: 'Namchi District (South Sikkim)',
+            description: 'Be part of South Sikkim\'s development journey. Our volunteers work closely with communities to identify and prioritize essential amenities.'
+        },
+        gyalshing: {
+            name: 'Gyalshing District (West Sikkim)',
+            description: 'Join West Sikkim volunteers in preserving heritage while improving infrastructure. Help connect scattered settlements with necessary facilities.'
+        },
+        pakyong: {
+            name: 'Pakyong District',
+            description: 'Shape the future of Sikkim\'s newest district. Volunteers play a crucial role in planning and advocating for infrastructure development.'
+        },
+        soreng: {
+            name: 'Soreng District',
+            description: 'Help build Soreng District from the ground up. Volunteers actively participate in identifying community needs and prioritizing amenity requests.'
+        }
+    };
+
+    const telegramModal = document.getElementById('telegramModal');
+    const telegramFloatingBtn = document.getElementById('telegramFloatingBtn');
+    const telegramClose = document.querySelector('.telegram-close');
+    const districtTabs = document.querySelectorAll('.district-tab');
+    const telegramJoinBtn = document.getElementById('telegramJoinBtn');
+
+    let currentTelegramDistrict = 'gangtok'; // Default district
+
+    // Open Telegram modal
+    if (telegramFloatingBtn) {
+        telegramFloatingBtn.addEventListener('click', function() {
+            telegramModal.style.display = 'block';
+            loadTelegramDistrictData(currentTelegramDistrict);
+        });
+    }
+
+    // Close Telegram modal
+    if (telegramClose) {
+        telegramClose.addEventListener('click', function() {
+            telegramModal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === telegramModal) {
+            telegramModal.style.display = 'none';
+        }
+    });
+
+    // District tab switching
+    districtTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            districtTabs.forEach(t => t.classList.remove('active'));
+
+            // Add active class to clicked tab
+            this.classList.add('active');
+
+            // Get district key
+            const district = this.dataset.district;
+            currentTelegramDistrict = district;
+
+            // Load district data
+            loadTelegramDistrictData(district);
+        });
+    });
+
+    // Load district data
+    async function loadTelegramDistrictData(districtKey) {
+        const info = telegramDistrictInfo[districtKey];
+
+        // Update district info
+        document.getElementById('telegramDistrictName').textContent = info.name;
+        document.getElementById('telegramDistrictDesc').textContent = info.description;
+
+        // Update join button link
+        telegramJoinBtn.href = telegramJoinLinks[districtKey];
+
+        // Reset stats with loading state
+        document.getElementById('telegramTotalRequests').textContent = '...';
+        document.getElementById('telegramPendingRequests').textContent = '...';
+
+        // Show loading in activity feed
+        document.getElementById('telegramActivityFeed').innerHTML = '<div class="loading-spinner">Loading activity...</div>';
+
+        // Fetch district data from API
+        const districtName = districtKey.charAt(0).toUpperCase() + districtKey.slice(1);
+
+        try {
+            const response = await fetch(`${API_BASE}/api/districts/${districtName}/requests?limit=5`);
+            const result = await response.json();
+
+            if (result.success) {
+                // Update stats
+                document.getElementById('telegramTotalRequests').textContent = result.stats.total;
+                document.getElementById('telegramPendingRequests').textContent = result.stats.pending;
+
+                // Display activity feed
+                displayTelegramActivity(result.requests);
+            }
+        } catch (error) {
+            console.error('Error fetching telegram district data:', error);
+            document.getElementById('telegramActivityFeed').innerHTML = '<div class="activity-item">Unable to load recent activity.</div>';
+            document.getElementById('telegramTotalRequests').textContent = '—';
+            document.getElementById('telegramPendingRequests').textContent = '—';
+        }
+    }
+
+    // Display activity feed
+    function displayTelegramActivity(requests) {
+        const container = document.getElementById('telegramActivityFeed');
+
+        if (requests.length === 0) {
+            container.innerHTML = '<div class="activity-item">No recent activity. Be the first to submit a request!</div>';
+            return;
+        }
+
+        container.innerHTML = requests.map(req => {
+            const timeAgo = getTimeAgo(new Date(req.submitted_at));
+            const amenitiesList = req.amenities.slice(0, 2).join(', ') + (req.amenities.length > 2 ? '...' : '');
+
+            return `
+                <div class="activity-item">
+                    <div class="activity-header">
+                        <span class="activity-location">${req.location}</span>
+                        <span class="activity-time">${timeAgo}</span>
+                    </div>
+                    <div class="activity-amenities">${amenitiesList}</div>
+                </div>
+            `;
+        }).join('');
+    }
 
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
