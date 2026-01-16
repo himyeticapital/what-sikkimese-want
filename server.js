@@ -6,6 +6,7 @@ const { Pool } = require('pg');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
 
 // Import notification services
 const { initializeEmailService, sendConfirmationEmail, sendStatusUpdateEmail } = require('./services/emailService');
@@ -54,6 +55,19 @@ const generalApiLimiter = rateLimit({
     }
 });
 
+// Admin login rate limiting: Allow 5 attempts per 15 minutes
+const loginRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // 5 login attempts per 15 minutes
+    message: {
+        success: false,
+        message: 'Too many login attempts. Please try again after 15 minutes.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skipSuccessfulRequests: true // Only count failed login attempts
+});
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -62,28 +76,42 @@ app.use(express.static(path.join(__dirname)));
 // Apply general rate limiting to all API routes
 app.use('/api/', generalApiLimiter);
 
-// In-memory session store (simple but effective for single admin)
-const adminSessions = new Set();
+// In-memory session store with expiration (24 hours)
+const adminSessions = new Map(); // Map of { token: { createdAt: timestamp } }
+const SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Generate secure random session token
 function generateSessionToken() {
     return require('crypto').randomBytes(32).toString('hex');
 }
 
-// Simple authentication middleware for admin routes
+// Simple authentication middleware for admin routes with session expiration
 const adminAuth = (req, res, next) => {
     const sessionToken = req.headers['x-admin-token'];
 
-    // Check if session token exists and is valid
-    if (sessionToken && adminSessions.has(sessionToken)) {
-        return next();
+    // Check if session token exists
+    if (!sessionToken || !adminSessions.has(sessionToken)) {
+        return res.status(401).json({
+            success: false,
+            message: 'Unauthorized. Admin access required.'
+        });
     }
 
-    // Unauthorized
-    return res.status(401).json({
-        success: false,
-        message: 'Unauthorized. Admin access required.'
-    });
+    // Check if session has expired
+    const session = adminSessions.get(sessionToken);
+    const now = Date.now();
+
+    if (now - session.createdAt > SESSION_EXPIRY) {
+        // Session expired, remove it
+        adminSessions.delete(sessionToken);
+        return res.status(401).json({
+            success: false,
+            message: 'Session expired. Please login again.'
+        });
+    }
+
+    // Session is valid
+    return next();
 };
 
 // PostgreSQL connection
@@ -135,10 +163,21 @@ async function initDB() {
             )
         `);
 
-        // Insert default admin if not exists
+        // Insert default admin if not exists (with bcrypt hashed password)
         const adminCheck = await pool.query('SELECT * FROM admins WHERE username = $1', ['admin']);
         if (adminCheck.rows.length === 0) {
-            await pool.query('INSERT INTO admins (username, password) VALUES ($1, $2)', ['admin', 'admin123']);
+            const hashedPassword = await bcrypt.hash('admin123', 10);
+            await pool.query('INSERT INTO admins (username, password) VALUES ($1, $2)', ['admin', hashedPassword]);
+            console.log('✅ Default admin created with hashed password');
+        } else {
+            // Check if existing admin has plain text password (starts with 'admin' and length < 30)
+            const existingAdmin = adminCheck.rows[0];
+            if (existingAdmin.password.length < 30) {
+                console.log('⚠️  WARNING: Existing admin has plain text password. Migrating to bcrypt...');
+                const hashedPassword = await bcrypt.hash(existingAdmin.password, 10);
+                await pool.query('UPDATE admins SET password = $1 WHERE username = $2', [hashedPassword, 'admin']);
+                console.log('✅ Admin password migrated to bcrypt hash');
+            }
         }
 
         // Create feedback table
@@ -434,26 +473,55 @@ app.delete('/api/requests/:id', adminAuth, async (req, res) => {
     }
 });
 
-// Admin login
-app.post('/api/admin/login', async (req, res) => {
+// Admin login with bcrypt and rate limiting
+app.post('/api/admin/login', loginRateLimiter, async (req, res) => {
     try {
         const { username, password } = req.body;
-        const result = await pool.query('SELECT * FROM admins WHERE username = $1 AND password = $2', [username, password]);
 
-        if (result.rows.length > 0) {
-            // Generate secure session token
-            const sessionToken = generateSessionToken();
-            adminSessions.add(sessionToken);
-
-            console.log(`✅ Admin logged in: ${username}`);
-            res.json({
-                success: true,
-                message: 'Login successful',
-                token: sessionToken
+        // Validate input
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Username and password are required'
             });
-        } else {
-            res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
+
+        // Get admin from database
+        const result = await pool.query('SELECT * FROM admins WHERE username = $1', [username]);
+
+        if (result.rows.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        const admin = result.rows[0];
+
+        // Compare password with bcrypt
+        const passwordMatch = await bcrypt.compare(password, admin.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        // Generate secure session token
+        const sessionToken = generateSessionToken();
+        adminSessions.set(sessionToken, {
+            createdAt: Date.now(),
+            username: username
+        });
+
+        console.log(`✅ Admin logged in: ${username}`);
+        res.json({
+            success: true,
+            message: 'Login successful',
+            token: sessionToken,
+            expiresIn: '24 hours'
+        });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ success: false, message: 'Login failed' });
