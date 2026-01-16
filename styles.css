@@ -3326,12 +3326,15 @@ html {
     border-radius: 12px;
     padding: 24px;
     border-left: 4px solid #0088cc;
+    margin-top: 28px;
+    margin-bottom: 20px;
 }
 
 .telegram-info-box h5 {
     color: var(--primary-dark);
-    font-size: 16px;
-    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
 }
 
 .telegram-info-box ul {
@@ -3341,11 +3344,12 @@ html {
 }
 
 .telegram-info-box li {
-    padding: 8px 0;
-    padding-left: 24px;
+    padding: 10px 0;
+    padding-left: 28px;
     position: relative;
     color: var(--text-body);
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.6;
 }
 
 .telegram-info-box li::before {
@@ -3354,6 +3358,7 @@ html {
     left: 0;
     color: #0088cc;
     font-weight: 700;
+    font-size: 16px;
 }
 
 /* Modal Footer */

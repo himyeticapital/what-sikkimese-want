@@ -534,6 +534,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Helper function for time ago
     function getTimeAgo(date) {
+        // Check if date is valid
+        if (!date || isNaN(date.getTime())) {
+            return 'Recently';
+        }
+
         const seconds = Math.floor((new Date() - date) / 1000);
 
         if (seconds < 60) return 'Just now';
