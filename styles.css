@@ -370,6 +370,38 @@ body {
     color: var(--primary-dark);
 }
 
+/* Mobile dropdown improvements */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: auto;
+        min-width: 100%;
+        border-radius: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .has-dropdown.dropdown-open .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu li a {
+        padding: 14px 24px;
+        font-size: 16px;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .dropdown-menu li:last-child a {
+        border-bottom: none;
+    }
+
+    /* Highlight active dropdown parent */
+    .has-dropdown.dropdown-open > a {
+        background: var(--primary-dark);
+    }
+}
+
 /* Hero Banner */
 .hero-banner {
     position: relative;
