@@ -988,67 +988,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ==========================================
-    // MOBILE DROPDOWN MENU FIX
-    // ==========================================
-    const dropdownToggles = document.querySelectorAll('.has-dropdown > a');
-    let isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
-
-    // Update on resize
-    window.addEventListener('resize', () => {
-        isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
-    });
-
-    // Handle click/touch on dropdown toggles
-    dropdownToggles.forEach(toggle => {
-        // Use both click and touchstart for better mobile support
-        const handleToggle = function(e) {
-            const parentLi = this.parentElement;
-            const isOpen = parentLi.classList.contains('dropdown-open');
-
-            // Prevent default navigation for # links
-            if (this.getAttribute('href') === '#') {
-                e.preventDefault();
-            }
-
-            // Close all other dropdowns first
-            document.querySelectorAll('.has-dropdown').forEach(item => {
-                if (item !== parentLi) {
-                    item.classList.remove('dropdown-open');
-                }
-            });
-
-            // Toggle current dropdown
-            if (!isOpen) {
-                e.preventDefault();
-                e.stopPropagation();
-                parentLi.classList.add('dropdown-open');
-            } else {
-                parentLi.classList.remove('dropdown-open');
-            }
-        };
-
-        toggle.addEventListener('click', handleToggle);
-        toggle.addEventListener('touchstart', handleToggle, { passive: false });
-    });
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.has-dropdown')) {
-            document.querySelectorAll('.has-dropdown').forEach(item => {
-                item.classList.remove('dropdown-open');
-            });
-        }
-    });
-
-    // Close dropdowns on touchstart outside (for mobile)
-    document.addEventListener('touchstart', function(e) {
-        if (!e.target.closest('.has-dropdown')) {
-            document.querySelectorAll('.has-dropdown').forEach(item => {
-                item.classList.remove('dropdown-open');
-            });
-        }
-    });
 
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
