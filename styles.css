@@ -3396,13 +3396,32 @@ html {
     }
 
     .telegram-district-tabs {
-        flex-direction: column;
-        max-height: 200px;
-        overflow-y: auto;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        padding: 8px 12px;
+    }
+
+    .telegram-district-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .telegram-district-tabs::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .telegram-district-tabs::-webkit-scrollbar-thumb {
+        background: #0088cc;
+        border-radius: 4px;
     }
 
     .district-tab {
-        min-width: 100%;
+        min-width: 120px;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 
     .telegram-stats-grid {
@@ -3411,7 +3430,7 @@ html {
 
     .telegram-modal-body {
         padding: 20px;
-        max-height: calc(95vh - 450px);
+        max-height: calc(95vh - 280px);
         overflow-y: auto;
     }
 
