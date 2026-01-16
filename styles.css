@@ -3389,8 +3389,16 @@ html {
         height: 56px;
     }
 
+    .telegram-modal .modal-content {
+        max-height: 95vh;
+        margin: 2.5vh auto;
+        width: 95%;
+    }
+
     .telegram-district-tabs {
         flex-direction: column;
+        max-height: 200px;
+        overflow-y: auto;
     }
 
     .district-tab {
@@ -3403,6 +3411,8 @@ html {
 
     .telegram-modal-body {
         padding: 20px;
+        max-height: calc(95vh - 450px);
+        overflow-y: auto;
     }
 
     .btn-telegram-join {
