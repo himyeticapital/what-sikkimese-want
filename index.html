@@ -17,9 +17,9 @@
                 <span>A Community-Driven Initiative by the People of Sikkim</span>
             </div>
             <div class="top-bar-right">
-                <a href="#about">About Us</a>
+                <a href="about.html">About Us</a>
                 <span class="divider">|</span>
-                <a href="#volunteer">Volunteer</a>
+                <a href="volunteer.html">Volunteer</a>
                 <span class="divider">|</span>
                 <a href="#contact">Contact</a>
             </div>
@@ -80,7 +80,7 @@
                         <li><a href="#guidelines">Guidelines</a></li>
                     </ul>
                 </li>
-                <li><a href="#about">About</a></li>
+                <li><a href="about.html">About</a></li>
                 <li><a href="#faq">FAQs</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -426,112 +426,84 @@
         </div>
     </section>
 
-    <!-- Combined Section: About, Volunteer, and Feedback -->
-    <section class="combined-info-section">
-        <div class="section-container">
-            <div class="info-grid">
-                <!-- About Section -->
-                <div id="about" class="info-card">
-                    <h2 class="info-card-title">About Our Initiative</h2>
-                    <div class="info-card-content">
-                        <p>"What Sikkimese Want!" is a community-led movement where citizens identify and advocate for essential public amenities. We bring together volunteers and local leaders to document needs and submit proposals to authorities for libraries, community centers, water facilities, and more.</p>
-                    </div>
-                </div>
 
-                <!-- Volunteer Section -->
-                <div id="volunteer" class="info-card">
-                    <h2 class="info-card-title">Join as Volunteer</h2>
-                    <div class="info-card-content">
-                        <p>Help shape Sikkim's future! Volunteers assist with surveys, documentation, and advocacy. No special qualifications needed - just a desire to help and basic smartphone skills. Contact us to join.</p>
-                    </div>
-                </div>
-
-                <!-- Feedback Section -->
-                <div id="feedback-form" class="info-card">
-                    <h2 class="info-card-title">Send Us Feedback</h2>
-                    <div class="info-card-content">
-                        <p class="feedback-intro">Help us improve! Share your thoughts, suggestions, or report any issues</p>
-                        <form id="feedbackForm">
-                            <div class="form-group">
-                                <input type="text" id="feedbackName" name="name" required placeholder="Full Name *">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" id="feedbackEmail" name="email" required placeholder="Email Address *">
-                            </div>
-                            <div class="form-group">
-                                <select id="feedbackType" name="type" required>
-                                    <option value="">Feedback Type *</option>
-                                    <option value="Suggestion">Suggestion</option>
-                                    <option value="Bug Report">Bug Report</option>
-                                    <option value="Complaint">Complaint</option>
-                                    <option value="Appreciation">Appreciation</option>
-                                    <option value="General">General Feedback</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <textarea id="feedbackMessage" name="message" rows="4" required placeholder="Your Message *"></textarea>
-                            </div>
-                            <button type="submit" class="btn-primary btn-full">Submit Feedback</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Districts Section -->
+    <!-- Districts Section - Carousel -->
     <section id="districts" class="districts-section">
         <div class="section-container">
             <h2 class="section-title">Explore Sikkim's Districts</h2>
-            <div class="districts-grid">
-                <div class="district-card" data-district="gangtok">
-                    <img src="https://images.unsplash.com/photo-1615966192539-f1731963b19a?w=400&q=80" alt="Gangtok District">
-                    <div class="district-info">
-                        <h3>Gangtok District</h3>
-                        <p>Capital district and administrative center of Sikkim</p>
-                        <span class="district-link">View Details</span>
+            <div class="districts-carousel-wrapper">
+                <button class="carousel-btn carousel-btn-prev" aria-label="Previous district">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+                <div class="districts-carousel">
+                    <div class="district-card active" data-district="gangtok">
+                        <img src="https://images.unsplash.com/photo-1615966192539-f1731963b19a?w=400&q=80" alt="Gangtok District">
+                        <div class="district-info">
+                            <h3>Gangtok District</h3>
+                            <p>Capital district and administrative center of Sikkim</p>
+                            <span class="district-link">View Details</span>
+                        </div>
+                    </div>
+                    <div class="district-card" data-district="mangan">
+                        <img src="https://images.unsplash.com/photo-1600402808924-9c591a6dace8?w=400&q=80" alt="Mangan District">
+                        <div class="district-info">
+                            <h3>Mangan District</h3>
+                            <p>North Sikkim headquarters with scenic beauty</p>
+                            <span class="district-link">View Details</span>
+                        </div>
+                    </div>
+                    <div class="district-card" data-district="namchi">
+                        <img src="https://images.unsplash.com/photo-1573398643956-2b9e6ade3456?w=400&q=80" alt="Namchi District">
+                        <div class="district-info">
+                            <h3>Namchi District</h3>
+                            <p>South Sikkim headquarters known for its culture</p>
+                            <span class="district-link">View Details</span>
+                        </div>
+                    </div>
+                    <div class="district-card" data-district="gyalshing">
+                        <img src="https://images.unsplash.com/photo-1562413181-9013f9846bff?w=400&q=80" alt="Gyalshing District">
+                        <div class="district-info">
+                            <h3>Gyalshing District</h3>
+                            <p>West Sikkim headquarters with rich heritage</p>
+                            <span class="district-link">View Details</span>
+                        </div>
+                    </div>
+                    <div class="district-card" data-district="pakyong">
+                        <img src="https://images.unsplash.com/photo-1632407575668-c956f851c3d7?w=400&q=80" alt="Pakyong District">
+                        <div class="district-info">
+                            <h3>Pakyong District</h3>
+                            <p>Newly formed district in East Sikkim</p>
+                            <span class="district-link">View Details</span>
+                        </div>
+                    </div>
+                    <div class="district-card" data-district="soreng">
+                        <img src="https://images.unsplash.com/photo-1613339027986-b94d85708995?w=400&q=80" alt="Soreng District">
+                        <div class="district-info">
+                            <h3>Soreng District</h3>
+                            <p>Newly formed district in West Sikkim</p>
+                            <span class="district-link">View Details</span>
+                        </div>
                     </div>
                 </div>
-                <div class="district-card" data-district="mangan">
-                    <img src="https://images.unsplash.com/photo-1600402808924-9c591a6dace8?w=400&q=80" alt="Mangan District">
-                    <div class="district-info">
-                        <h3>Mangan District</h3>
-                        <p>North Sikkim headquarters with scenic beauty</p>
-                        <span class="district-link">View Details</span>
-                    </div>
-                </div>
-                <div class="district-card" data-district="namchi">
-                    <img src="https://images.unsplash.com/photo-1573398643956-2b9e6ade3456?w=400&q=80" alt="Namchi District">
-                    <div class="district-info">
-                        <h3>Namchi District</h3>
-                        <p>South Sikkim headquarters known for its culture</p>
-                        <span class="district-link">View Details</span>
-                    </div>
-                </div>
-                <div class="district-card" data-district="gyalshing">
-                    <img src="https://images.unsplash.com/photo-1562413181-9013f9846bff?w=400&q=80" alt="Gyalshing District">
-                    <div class="district-info">
-                        <h3>Gyalshing District</h3>
-                        <p>West Sikkim headquarters with rich heritage</p>
-                        <span class="district-link">View Details</span>
-                    </div>
-                </div>
-                <div class="district-card" data-district="pakyong">
-                    <img src="https://images.unsplash.com/photo-1632407575668-c956f851c3d7?w=400&q=80" alt="Pakyong District">
-                    <div class="district-info">
-                        <h3>Pakyong District</h3>
-                        <p>Newly formed district in East Sikkim</p>
-                        <span class="district-link">View Details</span>
-                    </div>
-                </div>
-                <div class="district-card" data-district="soreng">
-                    <img src="https://images.unsplash.com/photo-1613339027986-b94d85708995?w=400&q=80" alt="Soreng District">
-                    <div class="district-info">
-                        <h3>Soreng District</h3>
-                        <p>Newly formed district in West Sikkim</p>
-                        <span class="district-link">View Details</span>
-                    </div>
-                </div>
+
+                <button class="carousel-btn carousel-btn-next" aria-label="Next district">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators">
+                <button class="indicator active" data-index="0" aria-label="Go to district 1"></button>
+                <button class="indicator" data-index="1" aria-label="Go to district 2"></button>
+                <button class="indicator" data-index="2" aria-label="Go to district 3"></button>
+                <button class="indicator" data-index="3" aria-label="Go to district 4"></button>
+                <button class="indicator" data-index="4" aria-label="Go to district 5"></button>
+                <button class="indicator" data-index="5" aria-label="Go to district 6"></button>
             </div>
         </div>
     </section>
@@ -543,10 +515,10 @@
                 <div class="footer-col">
                     <h4>About</h4>
                     <ul>
-                        <li><a href="#about">Our Initiative</a></li>
+                        <li><a href="about.html">Our Initiative</a></li>
                         <li><a href="#guidelines">How It Works</a></li>
                         <li><a href="#districts">Our Districts</a></li>
-                        <li><a href="#about">Volunteer Program</a></li>
+                        <li><a href="volunteer.html">Volunteer Program</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -571,8 +543,8 @@
                     <ul>
                         <li><a href="mailto:whatsikkimesewant@tutamail.com">whatsikkimesewant@tutamail.com</a></li>
                         <li><a href="#contact">Get In Touch</a></li>
-                        <li><a href="#about">Join as Volunteer</a></li>
-                        <li><a href="#feedback-form">Send Feedback</a></li>
+                        <li><a href="volunteer.html">Join as Volunteer</a></li>
+                        <li><a href="feedback.html">Send Feedback</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">

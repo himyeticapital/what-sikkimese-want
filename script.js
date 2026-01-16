@@ -925,6 +925,69 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
     }
 
+    // ==========================================
+    // DISTRICTS CAROUSEL
+    // ==========================================
+    const carouselSlides = document.querySelectorAll('.districts-carousel .district-card');
+    const carouselPrevBtn = document.querySelector('.carousel-btn-prev');
+    const carouselNextBtn = document.querySelector('.carousel-btn-next');
+    const carouselIndicators = document.querySelectorAll('.carousel-indicators .indicator');
+    let currentCarouselIndex = 0;
+
+    function showDistrictSlide(index) {
+        // Remove active class from all cards and indicators
+        carouselSlides.forEach(card => card.classList.remove('active'));
+        carouselIndicators.forEach(indicator => indicator.classList.remove('active'));
+
+        // Add active class to current slide and indicator
+        carouselSlides[index].classList.add('active');
+        carouselIndicators[index].classList.add('active');
+    }
+
+    function nextDistrictSlide() {
+        currentCarouselIndex = (currentCarouselIndex + 1) % carouselSlides.length;
+        showDistrictSlide(currentCarouselIndex);
+    }
+
+    function prevDistrictSlide() {
+        currentCarouselIndex = (currentCarouselIndex - 1 + carouselSlides.length) % carouselSlides.length;
+        showDistrictSlide(currentCarouselIndex);
+    }
+
+    // Event listeners for carousel buttons
+    if (carouselNextBtn) {
+        carouselNextBtn.addEventListener('click', nextDistrictSlide);
+    }
+
+    if (carouselPrevBtn) {
+        carouselPrevBtn.addEventListener('click', prevDistrictSlide);
+    }
+
+    // Event listeners for indicators
+    carouselIndicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentCarouselIndex = index;
+            showDistrictSlide(index);
+        });
+    });
+
+    // Auto-advance carousel every 5 seconds
+    if (carouselSlides.length > 0) {
+        setInterval(nextDistrictSlide, 5000);
+    }
+
+    // Keyboard navigation for carousel
+    document.addEventListener('keydown', (e) => {
+        // Only respond to arrow keys if not in a form input
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            if (e.key === 'ArrowLeft') {
+                prevDistrictSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextDistrictSlide();
+            }
+        }
+    });
+
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
     console.log('Backend API:', API_BASE + '/api');

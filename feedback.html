@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Feedback - What Sikkimese Want!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Skip to Main Content (Accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-left">
+                <span>A Community-Driven Initiative by the People of Sikkim</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="about.html">About Us</a>
+                <span class="divider">|</span>
+                <a href="volunteer.html">Volunteer</a>
+                <span class="divider">|</span>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-emblem">
+                    <div class="emblem-circle">SK</div>
+                </div>
+                <div class="logo-text">
+                    <h1><a href="index.html" style="color: inherit; text-decoration: none;">What Sikkimese Want!</a></h1>
+                    <p>By the Community, For the Community</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="admin.html" class="admin-link">Admin Portal</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li class="has-dropdown">
+                    <a href="#">Districts</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html#gangtok">Gangtok</a></li>
+                        <li><a href="index.html#mangan">Mangan</a></li>
+                        <li><a href="index.html#namchi">Namchi</a></li>
+                        <li><a href="index.html#gyalshing">Gyalshing</a></li>
+                        <li><a href="index.html#pakyong">Pakyong</a></li>
+                        <li><a href="index.html#soreng">Soreng</a></li>
+                    </ul>
+                </li>
+                <li class="has-dropdown">
+                    <a href="#">Services</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html#request-form">Submit Request</a></li>
+                        <li><a href="index.html#track">Track Status</a></li>
+                        <li><a href="index.html#guidelines">Guidelines</a></li>
+                    </ul>
+                </li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="index.html#faq">FAQs</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+        <div class="content-wrapper">
+            <div class="content-main">
+                <section class="form-section">
+                    <div class="section-header">
+                        <h2>Send Us Feedback</h2>
+                        <p>Help us improve! Share your thoughts, suggestions, or report any issues</p>
+                    </div>
+
+                    <div style="max-width: 700px; margin: 0 auto;">
+                        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <p style="line-height: 1.8; color: #333; margin-bottom: 2rem;">
+                                Your feedback helps us make this platform better for everyone. Whether you have suggestions for improvement, found a bug, or just want to share your experience, we'd love to hear from you.
+                            </p>
+
+                            <form id="feedbackForm">
+                                <div class="form-group">
+                                    <label for="feedbackName">Full Name <span class="required">*</span></label>
+                                    <input type="text" id="feedbackName" name="name" required placeholder="Enter your full name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackEmail">Email Address <span class="required">*</span></label>
+                                    <input type="email" id="feedbackEmail" name="email" required placeholder="your.email@example.com">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="feedbackPhone">Phone Number</label>
+                                        <input type="tel" id="feedbackPhone" name="phone" pattern="[6-9][0-9]{9}" placeholder="10-digit phone number (optional)">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="feedbackDistrict">District</label>
+                                        <select id="feedbackDistrict" name="district">
+                                            <option value="">-- Select district --</option>
+                                            <option value="Gangtok">Gangtok</option>
+                                            <option value="Mangan">Mangan</option>
+                                            <option value="Namchi">Namchi</option>
+                                            <option value="Gyalshing">Gyalshing</option>
+                                            <option value="Pakyong">Pakyong</option>
+                                            <option value="Soreng">Soreng</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackType">Feedback Type <span class="required">*</span></label>
+                                    <select id="feedbackType" name="type" required>
+                                        <option value="">-- Select feedback type --</option>
+                                        <option value="Suggestion">Suggestion</option>
+                                        <option value="Bug Report">Bug Report</option>
+                                        <option value="Complaint">Complaint</option>
+                                        <option value="Appreciation">Appreciation</option>
+                                        <option value="General">General Feedback</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackMessage">Your Message <span class="required">*</span></label>
+                                    <textarea id="feedbackMessage" name="message" rows="6" required minlength="10" maxlength="2000" placeholder="Share your thoughts, suggestions, or issues here..."></textarea>
+                                    <small style="color: #666; font-size: 0.85em;">Minimum 10 characters, maximum 2000 characters</small>
+                                </div>
+
+                                <div class="button-group">
+                                    <button type="submit" class="btn-primary">Submit Feedback</button>
+                                    <button type="reset" class="btn-secondary">Reset Form</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border-left: 4px solid #2c5aa0;">
+                            <h4 style="color: #2c5aa0; margin-bottom: 0.5rem;">What happens next?</h4>
+                            <p style="margin: 0; color: #666; line-height: 1.6;">
+                                After you submit your feedback, you'll receive a confirmation email with a reference ID. Our team reviews all feedback within 48-72 hours and will respond to your email if necessary.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Feedback Submitted</h2>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-grid footer-grid-4">
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="about.html">Our Initiative</a></li>
+                        <li><a href="index.html#guidelines">How It Works</a></li>
+                        <li><a href="index.html#districts">Our Districts</a></li>
+                        <li><a href="volunteer.html">Volunteer Program</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="index.html#request-form">Submit Request</a></li>
+                        <li><a href="index.html#track">Track Status</a></li>
+                        <li><a href="index.html#guidelines">Guidelines</a></li>
+                        <li><a href="index.html#faq">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://instagram.com/whatsikkimesewant" target="_blank">Instagram</a></li>
+                        <li><a href="https://youtube.com/@whatsikkimesewant" target="_blank">YouTube</a></li>
+                        <li><a href="mailto:whatsikkimesewant@tutamail.com">Email Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:whatsikkimesewant@tutamail.com">whatsikkimesewant@tutamail.com</a></li>
+                        <li><a href="index.html#contact">Get In Touch</a></li>
+                        <li><a href="volunteer.html">Join as Volunteer</a></li>
+                        <li><a href="feedback.html">Send Feedback</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="tech-stack.html">Tech Stack</a></li>
+                        <li><a href="index.html#faq">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-logo">
+                    <div class="emblem-circle small">SK</div>
+                    <span>Made with love in Sikkim</span>
+                </div>
+                <p class="copyright">&copy; 2026 What Sikkimese Want! A community initiative.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
