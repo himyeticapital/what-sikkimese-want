@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Stack - What Sikkimese Want</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .tech-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+        }
+
+        .tech-hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #003d4d 0%, #005876 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .tech-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .tech-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tech-section {
+            margin-bottom: 60px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tech-section h2 {
+            color: #003d4d;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ff6b35;
+        }
+
+        .tech-section h3 {
+            color: #005876;
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .tech-section h4 {
+            color: #00748c;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tech-section p {
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .tech-section ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .tech-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .tech-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .tech-card h4 {
+            color: #003d4d;
+            margin-top: 0;
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .tech-table table {
+            width: 100%;
+        }
+
+        .tech-table th,
+        .tech-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tech-table th {
+            background-color: #003d4d;
+            color: white;
+            font-weight: 600;
+        }
+
+        .tech-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .flow-diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .highlight-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff6b35;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            background: #003d4d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #005876;
+        }
+
+        @media (max-width: 768px) {
+            .tech-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .tech-section {
+                padding: 20px;
+            }
+
+            .tech-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="emblem-circle small">SK</div>
+                <span class="brand-text">What Sikkimese Want!</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#request-form">Submit Request</a>
+                <a href="index.html#track">Track Status</a>
+                <a href="admin.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="tech-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <div class="tech-hero">
+            <h1>🚀 Tech Stack & Architecture</h1>
+            <p>Complete technical documentation of the What Sikkimese Want portal - how it's built, deployed, and how everything works together</p>
+        </div>
+
+        <!-- Simple Explanation -->
+        <div class="tech-section">
+            <h2>💡 Simple Explanation (For Everyone)</h2>
+            <p>Think of this webapp like a <strong>digital suggestion box</strong> that works 24/7:</p>
+            <div class="tech-stack-grid">
+                <div class="tech-card">
+                    <h4>🌐 Frontend (What You See)</h4>
+                    <p>Like the form you fill out at a government office - built with HTML, CSS, and JavaScript</p>
+                </div>
+                <div class="tech-card">
+                    <h4>⚙️ Backend (The Processing Office)</h4>
+                    <p>Like government clerks who receive and process your applications - powered by Node.js</p>
+                </div>
+                <div class="tech-card">
+                    <h4>🗄️ Database (The Filing Cabinet)</h4>
+                    <p>Where all requests are stored safely - PostgreSQL on Render.com</p>
+                </div>
+                <div class="tech-card">
+                    <h4>📧 Email Service (The Postal System)</h4>
+                    <p>Sends confirmation letters to your email - powered by SendGrid</p>
+                </div>
+                <div class="tech-card">
+                    <h4>📱 Telegram Bot (The Town Crier)</h4>
+                    <p>Announces new requests in district community groups instantly</p>
+                </div>
+                <div class="tech-card">
+                    <h4>🏢 Hosting (The Building)</h4>
+                    <p>The place where all this happens, running 24/7 - on Railway.app</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- For Technical People -->
+        <div class="tech-section">
+            <h2>🔧 Technical Stack Overview</h2>
+
+            <h3>Frontend (Client-Side)</h3>
+            <ul>
+                <li><strong>HTML5, CSS3, Vanilla JavaScript</strong> - No frameworks, pure web technologies</li>
+                <li><strong>Responsive Design</strong> - Mobile-first approach</li>
+                <li><strong>Client-side Validation</strong> - HTML5 patterns + custom JS</li>
+                <li><strong>Key Files:</strong> index.html, admin.html, styles.css, script.js, admin-script.js</li>
+            </ul>
+
+            <h3>Backend (Server-Side)</h3>
+            <ul>
+                <li><strong>Runtime:</strong> Node.js v18+</li>
+                <li><strong>Framework:</strong> Express.js v4.18.2</li>
+                <li><strong>Architecture:</strong> RESTful API</li>
+                <li><strong>Security:</strong> Rate limiting, input validation, parameterized queries, session tokens</li>
+                <li><strong>Key Dependencies:</strong> express, pg, express-validator, express-rate-limit, @sendgrid/mail, node-telegram-bot-api</li>
+            </ul>
+
+            <h3>Database</h3>
+            <ul>
+                <li><strong>System:</strong> PostgreSQL 15+</li>
+                <li><strong>Hosting:</strong> Render.com (managed)</li>
+                <li><strong>Features:</strong> Daily backups, SSL/TLS encryption, parameterized queries</li>
+                <li><strong>Tables:</strong> requests, feedback, admins</li>
+            </ul>
+
+            <h3>Email Service</h3>
+            <ul>
+                <li><strong>Provider:</strong> SendGrid (Web API)</li>
+                <li><strong>Free Tier:</strong> 100 emails/day</li>
+                <li><strong>Features:</strong> HTML templates, delivery tracking, verified sender</li>
+                <li><strong>Sender:</strong> whatsikkimesewant@tutamail.com</li>
+            </ul>
+
+            <h3>Telegram Integration</h3>
+            <ul>
+                <li><strong>API:</strong> Telegram Bot API (official)</li>
+                <li><strong>Library:</strong> node-telegram-bot-api v0.67.0</li>
+                <li><strong>Setup:</strong> 6 district groups, bot posts new requests automatically</li>
+                <li><strong>Privacy:</strong> Phone numbers masked, first names only</li>
+            </ul>
+
+            <h3>Hosting & Deployment</h3>
+            <ul>
+                <li><strong>Web Server:</strong> Railway.app (PaaS)</li>
+                <li><strong>Database:</strong> Render.com</li>
+                <li><strong>CI/CD:</strong> Auto-deploy from GitHub</li>
+                <li><strong>SSL/HTTPS:</strong> Automatic via Railway</li>
+                <li><strong>Domain:</strong> whatsikkimesewant.com</li>
+            </ul>
+        </div>
+
+        <!-- API Endpoints -->
+        <div class="tech-section">
+            <h2>📡 API Endpoints</h2>
+            <div class="tech-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Endpoint</th>
+                            <th>Purpose</th>
+                            <th>Auth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>POST</td>
+                            <td>/api/requests</td>
+                            <td>Submit new amenity request</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>GET</td>
+                            <td>/api/requests</td>
+                            <td>List all requests (with filters)</td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>GET</td>
+                            <td>/api/requests/:id</td>
+                            <td>Get single request details</td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>PUT</td>
+                            <td>/api/requests/:id</td>
+                            <td>Update request status</td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>DELETE</td>
+                            <td>/api/requests/:id</td>
+                            <td>Delete request</td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>GET</td>
+                            <td>/api/track/:referenceId</td>
+                            <td>Track request by reference ID</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>POST</td>
+                            <td>/api/feedback</td>
+                            <td>Submit feedback</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>GET</td>
+                            <td>/api/feedback</td>
+                            <td>List all feedback</td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>POST</td>
+                            <td>/api/admin/login</td>
+                            <td>Admin authentication</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>POST</td>
+                            <td>/api/admin/logout</td>
+                            <td>Admin logout</td>
+                            <td>Admin</td>
+                        </tr>
+                        <tr>
+                            <td>GET</td>
+                            <td>/api/stats</td>
+                            <td>Dashboard statistics</td>
+                            <td>Admin</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Data Flow -->
+        <div class="tech-section">
+            <h2>🔄 How It All Works Together</h2>
+
+            <h3>When a User Submits a Request:</h3>
+            <div class="flow-diagram">
+User fills form on website
+    ↓
+JavaScript validates input
+    ↓
+fetch() sends POST request to /api/requests
+    ↓
+Railway.app receives HTTPS request
+    ↓
+Express.js checks rate limit (20 per 15 min)
+    ↓
+Express-Validator validates all fields
+    ↓
+Generate unique reference ID (SKM123456789)
+    ↓
+Save to PostgreSQL database on Render.com
+    ↓
+Send JSON response to user (1-2 seconds)
+    ↓
+User sees success message with reference ID
+    ↓
+<em>Background (async):</em>
+    ↓
+SendGrid API sends confirmation email (30-60 sec)
+    ↓
+Telegram Bot posts to district group (instant)
+            </div>
+
+            <h3>When Admin Updates Status:</h3>
+            <div class="flow-diagram">
+Admin logs in with username/password
+    ↓
+Backend generates secure session token
+    ↓
+Token stored in sessionStorage
+    ↓
+Admin views requests, clicks "View" button
+    ↓
+Modal shows full details
+    ↓
+Admin changes status (Pending → In Progress)
+    ↓
+Adds admin notes
+    ↓
+Clicks "Save Changes"
+    ↓
+PUT /api/requests/:id with auth token
+    ↓
+Backend validates token
+    ↓
+Updates database with new status
+    ↓
+Detects status change
+    ↓
+Sends status update email to user
+    ↓
+User receives email notification
+            </div>
+        </div>
+
+        <!-- Security -->
+        <div class="tech-section">
+            <h2>🔐 Security Architecture</h2>
+
+            <h3>Current Security Measures:</h3>
+            <div class="tech-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Protection</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Network</td>
+                            <td>HTTPS/SSL</td>
+                            <td>Automatic (Railway)</td>
+                        </tr>
+                        <tr>
+                            <td>Network</td>
+                            <td>CORS</td>
+                            <td>Configured in Express</td>
+                        </tr>
+                        <tr>
+                            <td>API</td>
+                            <td>Rate Limiting</td>
+                            <td>20 req/15min (submissions), 100 req/min (general)</td>
+                        </tr>
+                        <tr>
+                            <td>API</td>
+                            <td>Input Validation</td>
+                            <td>Express-validator on all endpoints</td>
+                        </tr>
+                        <tr>
+                            <td>Database</td>
+                            <td>SQL Injection Prevention</td>
+                            <td>Parameterized queries (pg library)</td>
+                        </tr>
+                        <tr>
+                            <td>Database</td>
+                            <td>Encrypted Connection</td>
+                            <td>SSL/TLS (Render.com)</td>
+                        </tr>
+                        <tr>
+                            <td>Admin Auth</td>
+                            <td>Session Tokens</td>
+                            <td>Crypto.randomBytes (64-char hex)</td>
+                        </tr>
+                        <tr>
+                            <td>Data Privacy</td>
+                            <td>Phone Masking</td>
+                            <td>Partial in public views (98XX XXX XXX)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cost Breakdown -->
+        <div class="tech-section">
+            <h2>💰 Cost Breakdown</h2>
+            <div class="highlight-box">
+                <h3>Monthly Operating Costs: ~$5-10</h3>
+                <div class="tech-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Plan</th>
+                                <th>Cost</th>
+                                <th>Usage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Railway.app</td>
+                                <td>Hobby</td>
+                                <td>$5 + usage</td>
+                                <td>Web hosting</td>
+                            </tr>
+                            <tr>
+                                <td>Render.com PostgreSQL</td>
+                                <td>Free</td>
+                                <td>$0</td>
+                                <td>Database (up to 1GB)</td>
+                            </tr>
+                            <tr>
+                                <td>SendGrid</td>
+                                <td>Free</td>
+                                <td>$0</td>
+                                <td>Email (up to 100/day)</td>
+                            </tr>
+                            <tr>
+                                <td>Telegram Bot API</td>
+                                <td>Free</td>
+                                <td>$0</td>
+                                <td>Unlimited messages</td>
+                            </tr>
+                            <tr>
+                                <td>Domain (whatsikkimesewant.com)</td>
+                                <td>—</td>
+                                <td>~$12/year</td>
+                                <td>DNS registration</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Total:</strong> Very affordable for a community project! The system can handle thousands of requests with current infrastructure.</p>
+            </div>
+        </div>
+
+        <!-- Scalability -->
+        <div class="tech-section">
+            <h2>📈 Scalability & Performance</h2>
+
+            <h3>Current Capacity:</h3>
+            <ul>
+                <li>~100 concurrent users</li>
+                <li>20 request submissions per 15 minutes per IP</li>
+                <li>100 emails per day (SendGrid free tier)</li>
+                <li>Unlimited Telegram messages</li>
+                <li>Database: 1GB storage (thousands of requests)</li>
+            </ul>
+
+            <h3>If Traffic Grows:</h3>
+            <ul>
+                <li>Railway auto-scales (pay for usage)</li>
+                <li>SendGrid: Upgrade to $15/month for 40,000 emails</li>
+                <li>Render: Upgrade database for more storage</li>
+                <li>Can add caching (Redis) if needed</li>
+                <li>Can add CDN for static files</li>
+            </ul>
+        </div>
+
+
+        <!-- Future Roadmap -->
+        <div class="tech-section">
+            <h2>🚀 Future Enhancements</h2>
+
+            <h3>Phase 1 (Current) ✅</h3>
+            <ul>
+                <li>Request submission & tracking</li>
+                <li>Admin dashboard</li>
+                <li>Email notifications</li>
+                <li>Telegram integration</li>
+                <li>District filtering</li>
+                <li>Reference ID tracking</li>
+            </ul>
+
+            <h3>Phase 2 (Planned) 🔜</h3>
+            <ul>
+                <li>Email verification (OTP)</li>
+                <li>Phone verification (SMS)</li>
+                <li>CAPTCHA integration</li>
+                <li>Admin password hashing</li>
+                <li>Request analytics dashboard</li>
+                <li>Public request maps (geolocation)</li>
+            </ul>
+
+            <h3>Phase 3 (Future) 💡</h3>
+            <ul>
+                <li>Mobile app (React Native)</li>
+                <li>Aadhaar verification</li>
+                <li>AI-powered duplicate detection</li>
+                <li>Request priority algorithm</li>
+                <li>Citizen voting on requests</li>
+            </ul>
+        </div>
+
+        <!-- Summary for Different Audiences -->
+        <div class="tech-section">
+            <h2>🎯 Summary for Different Audiences</h2>
+
+            <div class="tech-card">
+                <h4>For Government Officials:</h4>
+                <p>This is a modern, secure, cloud-based platform that allows citizens to submit amenity requests 24/7. All data is safely stored, backed up daily, and accessible through an admin dashboard. The system automatically notifies users via email and posts requests to community groups on Telegram for transparency.</p>
+            </div>
+
+            <div class="tech-card">
+                <h4>For Technical Developers:</h4>
+                <p>Standard MERN-like stack without React - Node.js/Express backend with PostgreSQL, vanilla JS frontend. RESTful API, parameterized queries for security, rate limiting for spam prevention, SendGrid for transactional emails, Telegram Bot API for community notifications. Deployed on Railway (web) and Render (database) with automatic CI/CD from GitHub.</p>
+            </div>
+
+            <div class="tech-card">
+                <h4>For Citizens:</h4>
+                <p>This is a website where you can submit requests for things your area needs (parks, street lights, toilets, etc.). You get a reference number to track your request, receive email updates when status changes, and your district's Telegram group is notified so the community can discuss and support your request.</p>
+            </div>
+
+            <div class="tech-card">
+                <h4>For Investors/Stakeholders:</h4>
+                <p>Low-cost (~$5-10/month), scalable, modern web application with automated workflows. Built with proven technologies, industry-standard security practices, and designed for transparency and citizen engagement. Can handle thousands of requests with current infrastructure, easily scalable to millions with minimal cost increase.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#request-form">Submit Request</a></li>
+                        <li><a href="index.html#track">Track Status</a></li>
+                        <li><a href="index.html#guidelines">Guidelines</a></li>
+                        <li><a href="index.html#faq">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://instagram.com/whatsikkimesewant" target="_blank">Instagram</a></li>
+                        <li><a href="https://youtube.com/@whatsikkimesewant" target="_blank">YouTube</a></li>
+                        <li><a href="mailto:whatsikkimesewant@tutamail.com">Email Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="tech-stack.html">Tech Stack</a></li>
+                        <li><a href="index.html#about">About Initiative</a></li>
+                        <li><a href="index.html#feedback-form">Send Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-logo">
+                    <div class="emblem-circle small">SK</div>
+                    <span>Made with love in Sikkim</span>
+                </div>
+                <p class="copyright">&copy; 2026 What Sikkimese Want! A community initiative.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
