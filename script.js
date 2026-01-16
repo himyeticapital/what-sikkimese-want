@@ -1149,6 +1149,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
     }
 
+    // Handle Telegram join button click with installation check
+    if (telegramJoinBtn) {
+        telegramJoinBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const telegramUrl = this.getAttribute('href');
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            // Try to open Telegram app
+            window.location.href = telegramUrl;
+
+            // After a short delay, check if user is still on page
+            // If they are, Telegram likely isn't installed
+            setTimeout(function() {
+                // Redirect to appropriate Telegram download page
+                if (isMobile) {
+                    // For mobile, redirect to Telegram website which will auto-detect platform
+                    window.open('https://telegram.org/dl', '_blank');
+                } else {
+                    // For desktop, redirect to desktop download page
+                    window.open('https://desktop.telegram.org/', '_blank');
+                }
+            }, 2000);
+        });
+    }
+
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
     console.log('Backend API:', API_BASE + '/api');
