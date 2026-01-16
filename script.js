@@ -988,6 +988,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ==========================================
+    // MOBILE DROPDOWN MENU FIX
+    // ==========================================
+    const dropdownToggles = document.querySelectorAll('.has-dropdown > a');
+
+    // Handle click/touch on dropdown toggles for mobile
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            // Only handle on touch devices or small screens
+            if ('ontouchstart' in window || window.innerWidth <= 768) {
+                const parentLi = this.parentElement;
+                const isOpen = parentLi.classList.contains('dropdown-open');
+
+                // Close all other dropdowns
+                document.querySelectorAll('.has-dropdown').forEach(item => {
+                    item.classList.remove('dropdown-open');
+                });
+
+                // Toggle current dropdown
+                if (!isOpen) {
+                    e.preventDefault();
+                    parentLi.classList.add('dropdown-open');
+                } else {
+                    // On second click, allow navigation if link has href
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.has-dropdown')) {
+            document.querySelectorAll('.has-dropdown').forEach(item => {
+                item.classList.remove('dropdown-open');
+            });
+        }
+    });
+
     // Console log for debugging
     console.log('Sikkim Amenities Portal initialized');
     console.log('Backend API:', API_BASE + '/api');
